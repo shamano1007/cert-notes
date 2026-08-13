@@ -2,14 +2,13 @@
 
 資格試験の勉強用にまとめた用語集です。Markdown で原本を書き、静的サイトとして公開しています。
 
-**公開サイト**: <https://foc-hamano.github.io/study-notes/>
-（リポジトリ名を変えた場合はこの URL も直すこと）
+**公開サイト**: <https://shamano1007.github.io/cert-notes/>
 
 ## 収録教材
 
 | 教材 | 原本 | 公開ページ |
 |---|---|---|
-| Google Cloud Generative AI Leader 用語集 | [`doc/genai-leader.md`](doc/genai-leader.md) | [genai-leader.html](https://foc-hamano.github.io/study-notes/genai-leader.html) |
+| Google Cloud Generative AI Leader 用語集 | [`doc/genai-leader.md`](doc/genai-leader.md) | [genai-leader.html](https://shamano1007.github.io/cert-notes/genai-leader.html) |
 
 ## ディレクトリ構成
 
