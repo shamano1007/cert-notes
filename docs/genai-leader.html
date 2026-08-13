@@ -1,0 +1,1469 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="学習しやすいよう、基礎 → 生成AI → 使いこなし → 製品 → 戦略 の順に並べています。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google Cloud Generative AI Leader 用語集">
+<meta property="og:description" content="学習しやすいよう、基礎 → 生成AI → 使いこなし → 製品 → 戦略 の順に並べています。">
+<title>Google Cloud Generative AI Leader 用語集</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128216;</text></svg>">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f7f9;
+  --bg-card: #ffffff;
+  --fg: #1a1d21;
+  --fg-muted: #5b6472;
+  --line: #e2e6ec;
+  --accent: #1a73e8;
+  --accent-soft: #e8f0fe;
+  --warn-bg: #fff4e5;
+  --warn-line: #f0a63c;
+  --warn-fg: #7a4a06;
+  --note-bg: #f2f4f7;
+  --note-fg: #4a5361;
+  --mark: #ffe680;
+  --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.10);
+  --header-h: 56px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1216;
+    --bg-soft: #161a20;
+    --bg-card: #171c22;
+    --fg: #e6e9ee;
+    --fg-muted: #9aa4b2;
+    --line: #262d36;
+    --accent: #7cb0ff;
+    --accent-soft: #1b2836;
+    --warn-bg: #2e2311;
+    --warn-line: #b9822f;
+    --warn-fg: #f0c489;
+    --note-bg: #1b2028;
+    --note-fg: #aab3c0;
+    --mark: #6b5a12;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1216; --bg-soft: #161a20; --bg-card: #171c22;
+  --fg: #e6e9ee; --fg-muted: #9aa4b2; --line: #262d36;
+  --accent: #7cb0ff; --accent-soft: #1b2836;
+  --warn-bg: #2e2311; --warn-line: #b9822f; --warn-fg: #f0c489;
+  --note-bg: #1b2028; --note-fg: #aab3c0; --mark: #6b5a12;
+  --shadow: none;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+               "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
+  font-size: 16px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+  overflow-wrap: anywhere;
+}
+.iconbtn {
+  flex: none;
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg-card); color: var(--fg);
+  font-size: 17px; cursor: pointer; padding: 0;
+  text-decoration: none;
+}
+.iconbtn:active { transform: scale(.95); }
+
+/* ---------- header ---------- */
+header {
+  position: sticky; top: 0; z-index: 40;
+  height: var(--header-h);
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 12px;
+  padding-top: env(safe-area-inset-top);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-weight: 700; font-size: 15px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;
+}
+@media (min-width: 900px) { #menuBtn { display: none; } }
+
+/* ---------- search ---------- */
+.searchwrap { position: relative; flex: 2; min-width: 110px; max-width: 340px; }
+#search {
+  width: 100%; height: 38px;
+  padding: 0 30px 0 32px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg-soft); color: var(--fg);
+  font-size: 16px; font-family: inherit;
+}
+#search:focus { outline: 2px solid var(--accent); outline-offset: -1px; background: var(--bg-card); }
+.searchwrap::before {
+  content: "\1F50D"; position: absolute; left: 9px; top: 50%;
+  transform: translateY(-50%); font-size: 13px; opacity: .65; pointer-events: none;
+}
+#clearBtn {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  width: 24px; height: 24px; border: 0; border-radius: 6px;
+  background: transparent; color: var(--fg-muted); cursor: pointer;
+  font-size: 15px; line-height: 1; display: none;
+}
+#clearBtn.on { display: block; }
+
+/* ---------- layout ----------
+   モバイル: ページ全体をスクロール（アドレスバー収納やプルリフレッシュを殺さない）
+   PC(>=900px): ヘッダー固定 + 左メニューと右本文をそれぞれ独立スクロール       */
+.wrap { display: block; }
+@media (min-width: 900px) {
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; overflow: hidden; }
+  header { position: static; flex: none; }
+  .wrap {
+    flex: 1; min-height: 0;
+    display: grid; grid-template-columns: 290px minmax(0, 1fr);
+  }
+}
+
+/* ---------- sidebar ---------- */
+#sidebar {
+  position: fixed; inset: 0 auto 0 0; z-index: 50;
+  width: min(86vw, 330px);
+  background: var(--bg-soft);
+  border-right: 1px solid var(--line);
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: 14px 12px 40px;
+  transform: translateX(-102%);
+  transition: transform .22s ease;
+}
+#sidebar.open { transform: none; box-shadow: 0 0 40px rgba(0,0,0,.35); }
+@media (min-width: 900px) {
+  #sidebar {
+    position: static; transform: none; box-shadow: none;
+    width: auto; inset: auto; height: 100%; min-height: 0;
+    overscroll-behavior: contain;
+  }
+}
+#overlay {
+  position: fixed; inset: 0; z-index: 45;
+  background: rgba(0,0,0,.42); opacity: 0; pointer-events: none;
+  transition: opacity .22s ease;
+}
+#overlay.on { opacity: 1; pointer-events: auto; }
+@media (min-width: 900px) { #overlay { display: none; } }
+
+#sidebar ul { list-style: none; margin: 0; padding: 0; }
+.nav-chapter { margin-bottom: 6px; }
+.nav-chapter > a {
+  display: block; padding: 7px 10px;
+  font-weight: 700; font-size: 13.5px; letter-spacing: .01em;
+  color: var(--fg); text-decoration: none; border-radius: 8px;
+}
+.nav-chapter > a:hover { background: var(--accent-soft); }
+.nav-chapter > ul { margin: 0 0 10px 4px; border-left: 2px solid var(--line); padding-left: 8px; }
+.nav-term > a {
+  display: block; padding: 5px 9px;
+  font-size: 13.5px; line-height: 1.5;
+  color: var(--fg-muted); text-decoration: none; border-radius: 7px;
+}
+.nav-term > a:hover { background: var(--accent-soft); color: var(--accent); }
+.nav-term.active > a { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+/* ---------- content ---------- */
+main { width: 100%; }
+.inner { padding: 20px 16px 96px; max-width: 820px; margin: 0 auto; }
+@media (min-width: 900px) {
+  main {
+    min-height: 0; height: 100%;
+    overflow-y: auto; overscroll-behavior: contain;
+    scroll-behavior: smooth;
+  }
+  .inner { padding: 28px 44px 120px; }
+  /* PC ではヘッダーがスクロール領域の外にあるので余白を詰める */
+  .chapter, .term { scroll-margin-top: 14px; }
+}
+
+.lead { margin-bottom: 22px; }
+.lead h1 { font-size: 23px; line-height: 1.45; margin: 0 0 8px; letter-spacing: -.01em; }
+@media (min-width: 900px) { .lead h1 { font-size: 30px; } }
+.lead p { color: var(--fg-muted); font-size: 14.5px; margin: 0; }
+.stats {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+  font-size: 12.5px; color: var(--fg-muted);
+}
+.stats span {
+  background: var(--bg-soft); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px 11px;
+}
+
+.chapter { margin-top: 40px; scroll-margin-top: calc(var(--header-h) + 10px); }
+.chapter-title {
+  font-size: 19px; margin: 0 0 4px;
+  padding-bottom: 9px; border-bottom: 2px solid var(--accent);
+  letter-spacing: -.01em;
+}
+
+.term {
+  margin-top: 18px; padding: 16px 17px;
+  background: var(--bg-card);
+  border: 1px solid var(--line); border-radius: 13px;
+  box-shadow: var(--shadow);
+  scroll-margin-top: calc(var(--header-h) + 10px);
+}
+.term-title { font-size: 17px; margin: 0 0 10px; line-height: 1.45; }
+.term-title .anchor { color: var(--fg); text-decoration: none; }
+.term-title .anchor:hover { color: var(--accent); }
+.term-title .anchor::after {
+  content: " #"; color: var(--accent); opacity: 0; font-weight: 400; font-size: .85em;
+}
+.term-title:hover .anchor::after { opacity: .55; }
+.term:target { border-color: var(--accent); }
+
+.sub-title {
+  font-size: 14.5px; margin: 18px 0 8px;
+  color: var(--accent); letter-spacing: .01em;
+}
+.term p { margin: 0 0 10px; font-size: 15px; }
+.term p:last-child { margin-bottom: 0; }
+.term ul { margin: 0 0 10px; padding-left: 1.25em; font-size: 15px; }
+.term li { margin-bottom: 7px; }
+.term li:last-child { margin-bottom: 0; }
+strong { font-weight: 700; }
+
+.callout { padding: 9px 13px; border-radius: 9px; font-size: 14px; line-height: 1.75; }
+.callout.note { background: var(--note-bg); color: var(--note-fg); }
+.callout.warn {
+  background: var(--warn-bg); color: var(--warn-fg);
+  border-left: 3px solid var(--warn-line);
+}
+.callout.warn::before { content: "\26A0\FE0F  "; }
+.callout.note::before { content: "\203B  "; opacity: .8; }
+
+mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+#empty {
+  display: none; text-align: center; color: var(--fg-muted);
+  padding: 60px 20px; font-size: 15px;
+}
+#empty.on { display: block; }
+#count { display: none; margin: 4px 0 0; font-size: 13px; color: var(--fg-muted); }
+#count.on { display: block; }
+
+#top {
+  position: fixed; right: 14px; z-index: 30;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--bg-card); color: var(--fg);
+  font-size: 17px; cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,.18);
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+#top.on { opacity: 1; pointer-events: auto; }
+
+@media print {
+  header, #sidebar, #overlay, #top { display: none !important; }
+  .wrap { display: block; }
+  .term { break-inside: avoid; box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="iconbtn" id="menuBtn" aria-label="目次を開く">&#9776;</button>
+  <a class="iconbtn" href="./" aria-label="教材一覧へ戻る" title="教材一覧へ戻る">&#8592;</a>
+  <span class="brand">Google Cloud Generative AI Leader 用語集</span>
+  <div class="searchwrap">
+    <input id="search" type="search" placeholder="用語を検索…" autocomplete="off"
+           enterkeyhint="search" aria-label="用語を検索">
+    <button id="clearBtn" aria-label="検索をクリア">&#10005;</button>
+  </div>
+  <button class="iconbtn" id="themeBtn" aria-label="配色を切り替え">&#9686;</button>
+</header>
+
+<div id="overlay"></div>
+
+<div class="wrap">
+  <nav id="sidebar" aria-label="目次">
+    <ul id="nav">
+<li class="nav-chapter" data-chapter="c1">
+<a href="#c1">第1章 AI・機械学習の基礎</a><ul>
+<li class="nav-term" data-target="t1"><a href="#t1">AI・機械学習・生成AI の関係</a></li>
+<li class="nav-term" data-target="t2"><a href="#t2">機械学習（ML）</a></li>
+<li class="nav-term" data-target="t3"><a href="#t3">機械学習ライフサイクル（ML ライフサイクル）</a></li>
+<li class="nav-term" data-target="t4"><a href="#t4">学習（Training）と推論（Inference）</a></li>
+<li class="nav-term" data-target="t5"><a href="#t5">教師あり・なし学習</a></li>
+<li class="nav-term" data-target="t6"><a href="#t6">分類モデル（二値分類・多クラス分類）</a></li>
+<li class="nav-term" data-target="t7"><a href="#t7">回帰モデル</a></li>
+<li class="nav-term" data-target="t8"><a href="#t8">クラスタリングモデル</a></li>
+<li class="nav-term" data-target="t9"><a href="#t9">生成モデルと識別モデル</a></li>
+<li class="nav-term" data-target="t10"><a href="#t10">強化学習</a></li>
+<li class="nav-term" data-target="t11"><a href="#t11">ディープラーニング</a></li>
+<li class="nav-term" data-target="t12"><a href="#t12">過学習（オーバーフィッティング）</a></li>
+<li class="nav-term" data-target="t13"><a href="#t13">未学習（アンダーフィッティング）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c2">
+<a href="#c2">第2章 データ</a><ul>
+<li class="nav-term" data-target="t14"><a href="#t14">構造化データ</a></li>
+<li class="nav-term" data-target="t15"><a href="#t15">半構造化データ</a></li>
+<li class="nav-term" data-target="t16"><a href="#t16">非構造化データ</a></li>
+<li class="nav-term" data-target="t17"><a href="#t17">データの品質（データクオリティ）</a></li>
+<li class="nav-term" data-target="t18"><a href="#t18">Garbage in, Garbage out（GIGO）</a></li>
+<li class="nav-term" data-target="t19"><a href="#t19">データ依存性</a></li>
+<li class="nav-term" data-target="t20"><a href="#t20">データの区分（ゼロパーティ〜サードパーティ）</a></li>
+<li class="nav-term" data-target="t21"><a href="#t21">特徴量エンジニアリング（Feature Engineering）</a></li>
+<li class="nav-term" data-target="t22"><a href="#t22">エンベディング（埋め込み）</a></li>
+<li class="nav-term" data-target="t23"><a href="#t23">ベクトル検索</a></li>
+<li class="nav-term" data-target="t24"><a href="#t24">セマンティック検索</a></li>
+<li class="nav-term" data-target="t25"><a href="#t25">Googleナレッジグラフ（Knowledge Graph）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c3">
+<a href="#c3">第3章 生成AIの基礎と限界</a><ul>
+<li class="nav-term" data-target="t26"><a href="#t26">生成AI（GenAI）</a></li>
+<li class="nav-term" data-target="t27"><a href="#t27">基盤モデル（foundation model）</a></li>
+<li class="nav-term" data-target="t28"><a href="#t28">大規模言語モデル（LLM）</a></li>
+<li class="nav-term" data-target="t29"><a href="#t29">SLM（Small Language Model／小規模言語モデル）</a></li>
+<li class="nav-term" data-target="t30"><a href="#t30">モダリティ</a></li>
+<li class="nav-term" data-target="t31"><a href="#t31">Transformer（トランスフォーマー）</a></li>
+<li class="nav-term" data-target="t32"><a href="#t32">拡散モデル（Diffusion Model）</a></li>
+<li class="nav-term" data-target="t33"><a href="#t33">トークン</a></li>
+<li class="nav-term" data-target="t34"><a href="#t34">コンテキストウィンドウ</a></li>
+<li class="nav-term" data-target="t35"><a href="#t35">レイテンシ</a></li>
+<li class="nav-term" data-target="t36"><a href="#t36">知識カットオフ（knowledge cutoff）</a></li>
+<li class="nav-term" data-target="t37"><a href="#t37">ハルシネーション（Hallucination）</a></li>
+<li class="nav-term" data-target="t38"><a href="#t38">非決定性</a></li>
+<li class="nav-term" data-target="t39"><a href="#t39">バイアス（bias）</a></li>
+<li class="nav-term" data-target="t40"><a href="#t40">エッジケース（edge case）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c4">
+<a href="#c4">第4章 モデルを使いこなす（カスタマイズ手法）</a><ul>
+<li class="nav-term" data-target="t41"><a href="#t41">プロンプトエンジニアリング</a></li>
+<li class="nav-term" data-target="t42"><a href="#t42">ゼロショットプロンプティング（zero-shot prompting）</a></li>
+<li class="nav-term" data-target="t43"><a href="#t43">フューショットプロンプティング（few-shot prompting）</a></li>
+<li class="nav-term" data-target="t44"><a href="#t44">Chain of Thought（思考の連鎖）</a></li>
+<li class="nav-term" data-target="t45"><a href="#t45">ロールプロンプティング（Role Prompting / ロールプロンプト）</a></li>
+<li class="nav-term" data-target="t46"><a href="#t46">プロンプトチェーン（Prompt Chaining／プロンプトチェイニング）</a></li>
+<li class="nav-term" data-target="t47"><a href="#t47">メタプロンプティング</a></li>
+<li class="nav-term" data-target="t48"><a href="#t48">プロンプトテンプレート</a></li>
+<li class="nav-term" data-target="t49"><a href="#t49">出力を制御するパラメータ</a></li>
+<li class="nav-term" data-target="t50"><a href="#t50">温度（Temperature）</a></li>
+<li class="nav-term" data-target="t51"><a href="#t51">Top-K</a></li>
+<li class="nav-term" data-target="t52"><a href="#t52">Top-P</a></li>
+<li class="nav-term" data-target="t53"><a href="#t53">グラウンディング（Grounding）</a></li>
+<li class="nav-term" data-target="t54"><a href="#t54">RAG（検索拡張生成 / Retrieval-Augmented Generation）</a></li>
+<li class="nav-term" data-target="t55"><a href="#t55">転移学習（Transfer Learning）</a></li>
+<li class="nav-term" data-target="t56"><a href="#t56">ファインチューニング（Fine-tuning / チューニング）</a></li>
+<li class="nav-term" data-target="t57"><a href="#t57">ポストプロセッシング（後処理）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c5">
+<a href="#c5">第5章 Google の生成AIモデル</a><ul>
+<li class="nav-term" data-target="t58"><a href="#t58">Gemini</a></li>
+<li class="nav-term" data-target="t59"><a href="#t59">Gemini Nano</a></li>
+<li class="nav-term" data-target="t60"><a href="#t60">Gemma</a></li>
+<li class="nav-term" data-target="t61"><a href="#t61">Imagen</a></li>
+<li class="nav-term" data-target="t62"><a href="#t62">Gemini Flash Image（nano banana）</a></li>
+<li class="nav-term" data-target="t63"><a href="#t63">Chirp</a></li>
+<li class="nav-term" data-target="t64"><a href="#t64">Veo</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c6">
+<a href="#c6">第6章 AIエージェント</a><ul>
+<li class="nav-term" data-target="t65"><a href="#t65">AIエージェント</a></li>
+<li class="nav-term" data-target="t66"><a href="#t66">「Agent（エージェント）」という語の使い分け</a></li>
+<li class="nav-term" data-target="t67"><a href="#t67">推論ループ（Reasoning Loop）</a></li>
+<li class="nav-term" data-target="t68"><a href="#t68">関数呼び出し（Function Calling / ツールの使用）</a></li>
+<li class="nav-term" data-target="t69"><a href="#t69">ReAct プロンプト</a></li>
+<li class="nav-term" data-target="t70"><a href="#t70">Agent Development Kit（ADK）</a></li>
+<li class="nav-term" data-target="t71"><a href="#t71">A2A（Agent2Agent）プロトコル</a></li>
+<li class="nav-term" data-target="t72"><a href="#t72">MCP（Model Context Protocol）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c7">
+<a href="#c7">第7章 Agent Platform（Google Cloud のAI基盤）</a><ul>
+<li class="nav-term" data-target="t73"><a href="#t73">Agent Platform</a></li>
+<li class="nav-term" data-target="t74"><a href="#t74">Agent Studio</a></li>
+<li class="nav-term" data-target="t75"><a href="#t75">Google AI Studio</a></li>
+<li class="nav-term" data-target="t76"><a href="#t76">Model Garden</a></li>
+<li class="nav-term" data-target="t77"><a href="#t77">Model Registry</a></li>
+<li class="nav-term" data-target="t78"><a href="#t78">Feature Store（旧称：Vertex AI Feature Store）</a></li>
+<li class="nav-term" data-target="t79"><a href="#t79">AutoML(自動機械学習)</a></li>
+<li class="nav-term" data-target="t80"><a href="#t80">Agent Platform Workbench</a></li>
+<li class="nav-term" data-target="t81"><a href="#t81">Colab Enterprise</a></li>
+<li class="nav-term" data-target="t82"><a href="#t82">Gen AI Evaluation Service</a></li>
+<li class="nav-term" data-target="t83"><a href="#t83">Agent Garden</a></li>
+<li class="nav-term" data-target="t84"><a href="#t84">Agent Search（旧称：Vertex AI Search）</a></li>
+<li class="nav-term" data-target="t85"><a href="#t85">MLOps</a></li>
+<li class="nav-term" data-target="t86"><a href="#t86">ドリフトモニタリング（Drift Monitoring）</a></li>
+<li class="nav-term" data-target="t87"><a href="#t87">Agent Platform Model Monitoring</a></li>
+<li class="nav-term" data-target="t88"><a href="#t88">TPU（Tensor Processing Unit）</a></li>
+<li class="nav-term" data-target="t89"><a href="#t89">エッジデバイス／エッジ AI</a></li>
+<li class="nav-term" data-target="t90"><a href="#t90">LiteRT（Lite Runtime）</a></li>
+<li class="nav-term" data-target="t91"><a href="#t91">Cloud Storage</a></li>
+<li class="nav-term" data-target="t92"><a href="#t92">Cloud Run functions（旧称：Cloud Functions）</a></li>
+<li class="nav-term" data-target="t93"><a href="#t93">TensorFlow</a></li>
+<li class="nav-term" data-target="t94"><a href="#t94">Cloud クライアント ライブラリ</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c8">
+<a href="#c8">第8章 事前構築済み AI API</a><ul>
+<li class="nav-term" data-target="t95"><a href="#t95">Cloud Vision API</a></li>
+<li class="nav-term" data-target="t96"><a href="#t96">光学式文字認識（OCR）</a></li>
+<li class="nav-term" data-target="t97"><a href="#t97">Video Intelligence API（旧称：Cloud Video Intelligence API）</a></li>
+<li class="nav-term" data-target="t98"><a href="#t98">Speech-to-Text API</a></li>
+<li class="nav-term" data-target="t99"><a href="#t99">Text-to-Speech API</a></li>
+<li class="nav-term" data-target="t100"><a href="#t100">VUI（Voice User Interface）</a></li>
+<li class="nav-term" data-target="t101"><a href="#t101">Natural Language API</a></li>
+<li class="nav-term" data-target="t102"><a href="#t102">Translation API</a></li>
+<li class="nav-term" data-target="t103"><a href="#t103">Document Translation（Cloud Translation API の機能）</a></li>
+<li class="nav-term" data-target="t104"><a href="#t104">Document AI API</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c9">
+<a href="#c9">第9章 業務で使う Google の AI 製品</a><ul>
+<li class="nav-term" data-target="t105"><a href="#t105">Gemini Enterprise</a></li>
+<li class="nav-term" data-target="t106"><a href="#t106">Google Workspace における Gemini</a></li>
+<li class="nav-term" data-target="t107"><a href="#t107">Google Vids</a></li>
+<li class="nav-term" data-target="t108"><a href="#t108">Gemini for Google Cloud</a></li>
+<li class="nav-term" data-target="t109"><a href="#t109">Gemini in BigQuery</a></li>
+<li class="nav-term" data-target="t110"><a href="#t110">Gem</a></li>
+<li class="nav-term" data-target="t111"><a href="#t111">NotebookLM</a></li>
+<li class="nav-term" data-target="t112"><a href="#t112">Customer Engagement Suite</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c10">
+<a href="#c10">第10章 AI戦略と責任あるAI</a><ul>
+<li class="nav-term" data-target="t113"><a href="#t113">AIファースト戦略</a></li>
+<li class="nav-term" data-target="t114"><a href="#t114">AI の民主化</a></li>
+<li class="nav-term" data-target="t115"><a href="#t115">生成AI活用の組織への定着（トップダウンとボトムアップ）</a></li>
+<li class="nav-term" data-target="t116"><a href="#t116">Responsible AI（責任あるAI）</a></li>
+<li class="nav-term" data-target="t117"><a href="#t117">説明可能性（Explainability）／Explainable AI</a></li>
+<li class="nav-term" data-target="t118"><a href="#t118">透明性（Transparency）</a></li>
+<li class="nav-term" data-target="t119"><a href="#t119">モデルカード（Model Card）</a></li>
+<li class="nav-term" data-target="t120"><a href="#t120">データカード（Data Card）</a></li>
+<li class="nav-term" data-target="t121"><a href="#t121">アカウンタビリティ（説明責任）</a></li>
+<li class="nav-term" data-target="t122"><a href="#t122">責任ある生成 AI ツールキット（Responsible Generative AI Toolkit）</a></li>
+<li class="nav-term" data-target="t123"><a href="#t123">Human-in-the-loop（HITL）</a></li>
+</ul></li>
+<li class="nav-chapter" data-chapter="c11">
+<a href="#c11">第11章 セキュリティとガバナンス</a><ul>
+<li class="nav-term" data-target="t124"><a href="#t124">安全フィルタ（Safety Filter）</a></li>
+<li class="nav-term" data-target="t125"><a href="#t125">レッドチームテスト（Red Teaming）</a></li>
+<li class="nav-term" data-target="t126"><a href="#t126">仮名化（Pseudonymization）</a></li>
+<li class="nav-term" data-target="t127"><a href="#t127">Secure AI Framework（SAIF）</a></li>
+<li class="nav-term" data-target="t128"><a href="#t128">Mandiant コンサルティング</a></li>
+<li class="nav-term" data-target="t129"><a href="#t129">Security Command Center（SCC）</a></li>
+<li class="nav-term" data-target="t130"><a href="#t130">IAM（Identity and Access Management）</a></li>
+</ul></li>
+    </ul>
+  </nav>
+
+  <main>
+   <div class="inner">
+    <div class="lead">
+      <h1>Google Cloud Generative AI Leader 用語集</h1>
+      <p>学習しやすいよう、基礎 → 生成AI → 使いこなし → 製品 → 戦略 の順に並べています。</p>
+      <div class="stats"><span>全 130 用語</span><span>11 章</span></div>
+      <p id="count"></p>
+    </div>
+    <div id="empty">該当する用語がありません</div>
+<section class="chapter" id="c1" data-chapter="c1">
+<h2 class="chapter-title">第1章 AI・機械学習の基礎</h2>
+<article class="term" id="t1" data-term="t1">
+<h3 class="term-title"><a class="anchor" href="#t1">AI・機械学習・生成AI の関係</a></h3>
+<p><strong>人工知能（AI） ⊃ 機械学習（ML） ⊃ 生成AI</strong><br>この3つは並列の別物ではなく、<strong>包含関係</strong>にあります。ここを最初に押さえると、以降の用語の位置関係が整理しやすくなります。</p>
+<h4 class="sub-title">人工知能（AI）</h4>
+<p>人が行う知的行為（学習・推論・意思決定など）を機械で実現しようとする広い領域です。<br>ルールベースのエキスパートシステム、探索・最適化、機械学習（ML）などを含む<strong>上位概念</strong>にあたります。</p>
+<h4 class="sub-title">機械学習（ML）</h4>
+<p>AI の一分野です。<br>データからパターンを学習し、明示的にプログラムされていない振る舞いを獲得する手法群を指します。</p>
+<h4 class="sub-title">生成AI</h4>
+<p>ML の応用領域のひとつで、学習した分布に基づいて<strong>新しいコンテンツを生成する</strong>技術です。<br>例：文章生成（要約・翻訳・Q&amp;A）、画像生成、コード生成、音声／動画生成など。</p>
+<p class="callout note">公式ガイドでは「ML は機械がデータから学習して特定のタスクを実行する AI の一分野」「生成 AI は新しいコンテンツの作成に重点を置いた ML の一用途」と説明され、AI ⊃ ML ⊃ Gen AI の同心円で図示されています。</p>
+<p class="callout note"><strong>ディープラーニング</strong>も ML の一分野で、生成 AI の多くはディープラーニングを土台にしています。</p>
+</article>
+<article class="term" id="t2" data-term="t2">
+<h3 class="term-title"><a class="anchor" href="#t2">機械学習（ML）</a></h3>
+<p>人間が直接すべてのルールをプログラミングするのではなく、<strong>データからコンピュータが自動でルールやパターンを学習する技術</strong>のことです。</p>
+<p class="callout note">ML には主に3つの学習アプローチがあります。<strong>教師あり学習・教師なし学習・強化学習</strong>です。</p>
+</article>
+<article class="term" id="t3" data-term="t3">
+<h3 class="term-title"><a class="anchor" href="#t3">機械学習ライフサイクル（ML ライフサイクル）</a></h3>
+<p><strong>ML ライフサイクル＝「データの取り込みと準備 → モデルのトレーニング → モデルのデプロイ → モデルの管理」を繰り返すサイクル</strong><br>ML ライフサイクルとは、機械学習モデルを作って使い続けるまでの一連の流れを4つの段階で整理したものです。<br>一度作って終わりではなく、<strong>管理の段階で得た知見を次のデータ準備に戻す</strong>ことで、継続的に改善していく循環（サイクル）である点が重要です。</p>
+<h4 class="sub-title">①データの取り込みと準備（Data ingestion and preparation）</h4>
+<p>元データを収集、整理、変換して、分析やモデルのトレーニングに使用できる形にするプロセスです。<br>欠損値の処理、不要な情報の削除、形式の統一、モデルが特徴として認識しやすい形への変換（特徴量エンジニアリング）などを行います。</p>
+<p class="callout note">ライフサイクル全体のなかで最も時間と労力がかかる段階とされます。<strong>GIGO</strong>（入力がゴミなら出力もゴミ）が効いてくるのがここです。</p>
+<h4 class="sub-title">②モデルのトレーニング（Model training）</h4>
+<p>データを使用して ML モデルを作成するプロセスです。<br>アルゴリズムを選び、ハイパーパラメータを調整しながら学習させ、精度を評価します。</p>
+<p class="callout note">この段階で<strong>過学習・未学習</strong>が起きていないかを、学習データとは別の評価データで確認します。</p>
+<h4 class="sub-title">③モデルのデプロイ（Model deployment）</h4>
+<p>トレーニング済みモデルを利用できるようにするプロセスです。<br>アプリケーションから呼び出せるようエンドポイントとして公開したり、バッチ処理で使えるようにしたりします。</p>
+<p class="callout note">いきなり本番に出さず、検証環境で品質を確かめてから本番環境へ出すのが一般的です。</p>
+<h4 class="sub-title">④モデルの管理（Model management）</h4>
+<p>モデルを長期にわたって管理、保守するプロセスです。<br>バージョン管理、性能の監視、<strong>ドリフトモニタリング</strong>、必要に応じた再トレーニングなどを行います。</p>
+<p class="callout note">運用データの傾向が変わるとモデルの精度は下がっていくため、<strong>管理から①へ戻って回し続ける</strong>ことが前提になります。この考え方を体系化したものが <strong>MLOps</strong> です。</p>
+<h4 class="sub-title">各段階に対応する Google Cloud の主なサービス</h4>
+<ul><li><strong>①データの取り込みと準備</strong>：Cloud Storage（ファイル保存）、BigQuery（分析用データウェアハウス）、Feature Store（特徴量の一元管理）</li><li><strong>②モデルのトレーニング</strong>：Agent Platform の AutoML（コード不要）、Model Builder / カスタム トレーニング（独自モデル）、Model Garden（学習済みモデルの活用）</li><li><strong>③モデルのデプロイ</strong>：Endpoints、Agent Engine（エージェントのマネージドランタイム）、Cloud Run</li><li><strong>④モデルの管理</strong>：Model Registry（バージョン管理）、Pipelines（ワークフロー自動化）、Agent Platform の MLOps ツール（モニタリング）</li></ul>
+</article>
+<article class="term" id="t4" data-term="t4">
+<h3 class="term-title"><a class="anchor" href="#t4">学習（Training）と推論（Inference）</a></h3>
+<p><strong>学習＝データからパターンを見つけてパラメータを調整する工程、推論＝学習済みモデルを使って答えを出す工程</strong><br><strong>学習（Training）</strong>は、モデルが大量のデータからパターンや関係性を見つけ出すプロセスで、モデルの重みやパラメータが調整されます。<br>一方、<strong>推論（Inference）</strong>は、すでに学習済みのモデルを使って新しい入力に対して出力を生成するプロセスです。<br>これはユーザーがモデルを利用する場面にあたります。</p>
+<ul><li><strong>学習</strong>：多くの計算資源と時間が必要。一度きり、または定期的に実施する。TPU / GPU を大量に使う。</li><li><strong>推論</strong>：1回あたりは軽いが、利用されるたびに毎回発生する。レイテンシとコストの累積が課題になる。</li></ul>
+<p class="callout note"><strong>ML ライフサイクル</strong>では「②モデルのトレーニング」が学習、「③モデルのデプロイ」以降で行われるのが推論にあたります。</p>
+<p class="callout note">プロンプトを工夫する、RAG で情報を渡すといった行為は<strong>推論時</strong>の工夫であり、モデルのパラメータは変わりません。パラメータを変えるのはファインチューニング（＝再学習）です。</p>
+</article>
+<article class="term" id="t5" data-term="t5">
+<h3 class="term-title"><a class="anchor" href="#t5">教師あり・なし学習</a></h3>
+
+<h4 class="sub-title">教師あり学習</h4>
+<p><strong>教師あり学習＝入力と正解ラベルのペアで学習し、予測や分類を行う手法</strong><br>教師あり学習では、<strong>ラベルありデータ</strong>を使って、入力と正解の関係をモデルに学習させます。</p>
+<p class="callout note"><strong>ラベルありデータ</strong>とは、データごとに正解、分類名、カテゴリ、評価結果などがあらかじめ付けられているデータのことです。</p>
+<p>代表的な用途には、分類（スパム判定など）と回帰（売上予測など）があります。</p>
+<h4 class="sub-title">教師なし学習</h4>
+<p>教師なし学習は、<strong>正解ラベルが付いていないデータ</strong>を使って、データの中にある自然な構造、グループ、パターンを見つける機械学習手法です。<br>教師あり学習のように「この入力に対する正解はこれ」と教えるのではなく、モデル自身がデータの特徴を分析し、似ているデータ同士をまとめたり、隠れた傾向を見つけたりします。<br>代表的な手法には、データを似た特徴ごとに分類する<strong>クラスタリング</strong>や、多くの特徴量を整理・圧縮する<strong>次元削減</strong>があります。</p>
+<h4 class="sub-title">具体例</h4>
+<p>例えば、小売業で顧客の購買履歴を分析する場合、教師なし学習を使うと、あらかじめ「この顧客は価格重視型」「この顧客はブランド重視型」とラベルを付けていなくても、購買傾向の似た顧客を自動的にグループ化できます。<br>その結果、企業は「まとめ買いをする顧客グループ」「高価格帯の商品を好む顧客グループ」「セール時に購入が多い顧客グループ」などを発見し、それぞれに合ったマーケティング施策を考えることができます。</p>
+</article>
+<article class="term" id="t6" data-term="t6">
+<h3 class="term-title"><a class="anchor" href="#t6">分類モデル（二値分類・多クラス分類）</a></h3>
+<p><strong>分類モデル＝入力がどのカテゴリに当てはまるかを予測するモデル</strong><br>分類モデルは、<strong>あらかじめ決められたカテゴリ（クラス）のうち、どれに該当するかを予測する教師あり学習のモデル</strong>です。<br>出力は「数値」ではなく「ラベル」である点が、回帰モデルとの違いです。</p>
+<ul><li><strong>二値分類（Binary Classification）</strong>：選択肢が2つのもの。「スパムか否か」「解約するかしないか」「不良品か良品か」など。</li><li><strong>多クラス分類（Multi-class Classification）</strong>：選択肢が3つ以上のもの。「問い合わせ内容を10種類のカテゴリに振り分ける」「画像が犬・猫・鳥のどれかを判定する」など。</li></ul>
+<p class="callout note">実際には「スパムである確率 92%」のように確率が出力され、しきい値（例：50%以上ならスパム）で最終的なラベルを決めるのが一般的です。</p>
+<p class="callout note">AutoML では、画像・動画・テキスト・表形式のいずれのデータ型でも分類がサポートされています。</p>
+</article>
+<article class="term" id="t7" data-term="t7">
+<h3 class="term-title"><a class="anchor" href="#t7">回帰モデル</a></h3>
+<p><strong>回帰モデル＝数値の連続値を予測するモデル（分類と対になる考え方）</strong><br>回帰モデルは、<strong>機械学習において数値的な連続値（たとえば価格、売上、温度など）を予測するために用いられるモデル</strong>です。<br>「次週の売上金額」という数値を予測したい場合は、分類ではなく回帰が適切です。<br>代表的な回帰モデルの例：</p>
+<ul><li>線形回帰（Linear Regression）</li><li>リッジ回帰、ラッソ回帰などの正則化モデル</li><li>決定木ベースの回帰（例：ランダムフォレスト回帰）</li></ul>
+<p class="callout note">どちらも<strong>教師あり学習</strong>の代表的な用途です。<strong>「いくら／どれくらい」と数値を当てるのが回帰</strong>、<strong>「どれに当てはまるか」とカテゴリを当てるのが分類</strong>、という違いで押さえます。</p>
+<p class="callout note">「解約するかどうか」→分類、「解約確率が何％か・売上がいくらか」→回帰、と問題の立て方で変わります。</p>
+</article>
+<article class="term" id="t8" data-term="t8">
+<h3 class="term-title"><a class="anchor" href="#t8">クラスタリングモデル</a></h3>
+<p><strong>クラスタリングモデル＝正解ラベルなしで、似たもの同士を自動的にグループ分けするモデル</strong><br>クラスタリングモデルは、<strong>教師なし学習の代表的な手法</strong>で、データの中から似た特徴を持つもの同士をまとめてグループ（クラスタ）を作ります。<br>分類モデルとの決定的な違いは、<strong>あらかじめカテゴリが決まっていない</strong>ことです。<br>分類は「用意された箱のどれに入れるか」、クラスタリングは「<strong>箱そのものをデータから見つけ出す</strong>」処理にあたります。<br>代表的な用途：</p>
+<ul><li>顧客セグメンテーション（購買傾向の似た顧客をグループ化）</li><li>異常検知（どのグループにも属さないデータを外れ値として検出）</li><li>文書やニュース記事のテーマ別グルーピング</li></ul>
+<p class="callout note">出てきたグループに「価格重視層」「ブランド重視層」といった<strong>意味を与えるのは人間の仕事</strong>です。モデルは「似ている」ことしか教えてくれません。</p>
+<p class="callout note">代表的なアルゴリズムに k-means などがあります。</p>
+</article>
+<article class="term" id="t9" data-term="t9">
+<h3 class="term-title"><a class="anchor" href="#t9">生成モデルと識別モデル</a></h3>
+<p><strong>生成モデル＝データそのものを作り出すモデル、識別モデル＝データを見分けるモデル</strong><br>機械学習のモデルは、何を学習するかによって大きく2種類に分けられます。</p>
+<ul><li><strong>生成モデル（Generative Model）</strong>：データがどのように分布しているかを学習し、<strong>その分布に従って新しいデータを作り出す</strong>モデル。文章、画像、音声、動画などを生成できます。<strong>生成AI はこの系統</strong>にあたります。</li><li><strong>識別モデル（Discriminative Model）</strong>：データとラベルの<strong>境界線</strong>を学習し、与えられた入力がどちらに属するかを見分けるモデル。分類モデルや回帰モデルがこれにあたります。</li></ul>
+<p class="callout note">「猫の画像を新しく描けるのが生成モデル」「猫か犬かを見分けるのが識別モデル」と考えると分かりやすいです。</p>
+<p class="callout note">拡散モデルや LLM は生成モデルの代表例です。従来の機械学習が<strong>予測・判別</strong>中心だったのに対し、生成AIは<strong>創出</strong>を担う点が大きな違いになります。</p>
+</article>
+<article class="term" id="t10" data-term="t10">
+<h3 class="term-title"><a class="anchor" href="#t10">強化学習</a></h3>
+<p>強化学習は、エージェントが環境の中で行動し、その結果として得られる<strong>報酬や罰</strong>をもとに、より良い行動を学習する手法です。<br>公式ガイドでは「<strong>報酬を最大化し、ペナルティを最小化するように、インタラクションとフィードバックを通じて学習する</strong>」と説明されています。</p>
+<p class="callout note">教師あり学習・教師なし学習と並ぶ、機械学習の代表的な3分類の一つです。</p>
+<p class="callout note">正解ラベルを与えるのではなく「<strong>結果の良し悪しだけ</strong>」を伝える点が、教師あり学習との決定的な違いです。</p>
+<h4 class="sub-title">強化学習プロセスの構成要素</h4>
+<ul><li><strong>エージェント（Agent）</strong>：学習して行動する主体。報酬が最大になる振る舞いを身につけるのが目的。</li><li><strong>環境（Environment）</strong>：エージェントが働きかける対象。行動を受けて状態が変化する。</li><li><strong>状態（State）</strong>：環境の現在の状況。エージェントが行動を決める判断材料になる。</li><li><strong>行動（Action）</strong>：エージェントがその状態で選べる操作。</li><li><strong>報酬（Reward）／ペナルティ</strong>：行動の結果として環境から返ってくる評価値。行動の良し悪しを数値で示す。</li><li><strong>方策（Policy）</strong>：どの状態でどの行動を選ぶかという戦略。学習によって更新されていく。</li></ul>
+<h4 class="sub-title">強化学習プロセスの流れ</h4>
+<ul><li>①エージェントが環境の<strong>状態を観測</strong>する</li><li>②方策に従って<strong>行動を選択・実行</strong>する</li><li>③環境が変化し、その結果として<strong>報酬（または罰）を受け取る</strong></li><li>④受け取った報酬をもとに<strong>方策を更新</strong>する</li><li>⑤①に戻り、報酬が最大になるまで<strong>試行錯誤をくり返す</strong></li></ul>
+<p>この「観測 → 行動 → 報酬 → 方策の更新」のループを回し続けることで、どう振る舞えば望ましい結果につながるかを自力で見つけていきます。</p>
+<p class="callout note">短期的な報酬だけを追うと最善に届かないため、<strong>すでに良いと分かっている行動を選ぶ（活用）</strong> か <strong>未知の行動を試す（探索）</strong> かのバランスも重要になります。</p>
+<h4 class="sub-title">具体例</h4>
+<p>たとえば、ゲームAIでは、キャラクターを操作して勝利すれば報酬を得て、失敗すればペナルティを受けます。<br>最初はうまく動けなくても、繰り返しプレイする中で「敵を避ける」「有利な位置に移動する」など、報酬につながる行動を学んでいきます。<br>このとき、キャラクターが<strong>エージェント</strong>、ゲームの盤面が<strong>環境</strong>、現在の位置や残り体力が<strong>状態</strong>、移動や攻撃が<strong>行動</strong>、スコアの増減が<strong>報酬</strong>にあたります。</p>
+<h4 class="sub-title">生成AIとの関係（RLHF）</h4>
+<p>生成 AI の文脈では、<strong>RLHF（人間のフィードバックによる強化学習 / Reinforcement Learning from Human Feedback）</strong> として使われます。<br>モデルの複数の回答に人間が good / bad の評価をつけ、それを報酬として学習させることで、より人間の好みや価値観に沿った応答をするよう調整します。</p>
+<p class="callout note">「役に立つ」「安全である」といった<strong>数値化しにくい良さ</strong>を、人間の評価を報酬に変換して学習させられる点が強化学習の強みです。</p>
+</article>
+<article class="term" id="t11" data-term="t11">
+<h3 class="term-title"><a class="anchor" href="#t11">ディープラーニング</a></h3>
+<p><strong>ディープラーニング＝多層のニューラルネットワークで複雑な特徴を学習する機械学習の一分野</strong><br>ディープラーニングは、機械学習の一分野であり、<strong>人工ニューラルネットワークを使ってデータから複雑なパターンを学習する技術</strong>です。<br>ニューラルネットワークは、人間の脳の神経回路を参考にした仕組みで、複数の層を通じて情報を処理します。<br>層が多くなることで、画像、音声、文章、時系列データなどに含まれる高度で抽象的な特徴を段階的に捉えられるようになります。<br>そのため、ディープラーニングは画像認識、音声認識、自然言語処理、生成 AI など、さまざまな分野で活用されています。</p>
+</article>
+<article class="term" id="t12" data-term="t12">
+<h3 class="term-title"><a class="anchor" href="#t12">過学習（オーバーフィッティング）</a></h3>
+<p><strong>過学習＝学習データには高精度、未知データには低精度</strong><br>過学習（オーバーフィッティング）とは、モデルが<strong>学習データに過度に適合しすぎた状態</strong>のことです。<br>トレーニングデータに対しては高い精度を出せますが、テストデータや実運用で出てくる新しいデータに対しては精度が下がります。</p>
+<p class="callout note">過学習と混同しやすいのが、後述の<strong>未学習（アンダーフィッティング）</strong>です。</p>
+<h4 class="sub-title">具体例</h4>
+<p>たとえば、試験勉強で過去問の答えだけを丸暗記した場合、同じ問題なら正解できますが、少し言い回しや条件が変わると解けなくなることがあります。<br>機械学習でも同じように、学習データにだけ強く、初めて見るデータに弱い状態が過学習です。</p>
+</article>
+<article class="term" id="t13" data-term="t13">
+<h3 class="term-title"><a class="anchor" href="#t13">未学習（アンダーフィッティング）</a></h3>
+<p><strong>未学習＝学習データにも未知のデータにも精度が出ない</strong><br>未学習（アンダーフィッティング）とは、<strong>モデルが単純すぎたり学習が不十分だったりして、学習データのパターンすら十分に捉えられていない状態</strong>のことです。<br>そのため、トレーニングデータに対しても、新しいデータに対しても精度が低くなります。<br>過学習が「学習データに強く適合しすぎている」状態であるのに対し、未学習は「そもそも十分に学習できていない」状態である点が違いです。</p>
+</article>
+</section>
+<section class="chapter" id="c2" data-chapter="c2">
+<h2 class="chapter-title">第2章 データ</h2>
+<article class="term" id="t14" data-term="t14">
+<h3 class="term-title"><a class="anchor" href="#t14">構造化データ</a></h3>
+<p><strong>構造化データ＝行と列（スキーマ）で整理されたデータ</strong><br>構造化データとは、<strong>あらかじめ決められた形式やスキーマに従って整理されているデータ</strong>のことです。<br>代表的な例は、リレーショナルデータベースやスプレッドシートのように、行と列で管理されているデータです。</p>
+</article>
+<article class="term" id="t15" data-term="t15">
+<h3 class="term-title"><a class="anchor" href="#t15">半構造化データ</a></h3>
+<p><strong>半構造化データ＝厳密な表形式ではないが、タグや階層で構造を持つデータ</strong><br>JSON、XML、YAML、HTML などが代表例です。<br>行と列には収まらないものの、キーやタグによって意味が識別できるため、構造化データと非構造化データの中間に位置づけられます。</p>
+</article>
+<article class="term" id="t16" data-term="t16">
+<h3 class="term-title"><a class="anchor" href="#t16">非構造化データ</a></h3>
+<p><strong>非構造化データ＝文章・画像・音声・動画など、自由形式のデータ</strong><br>非構造化データとは、<strong>決まった行・列やスキーマに整理されていないデータ</strong>のことです。<br>代表的な例には、メール本文、文書ファイル、画像、音声、動画、SNS 投稿などがあります。<br>企業が持つデータの大半は非構造化データであり、生成AIはこれを活用できる点に大きな価値があります。</p>
+</article>
+<article class="term" id="t17" data-term="t17">
+<h3 class="term-title"><a class="anchor" href="#t17">データの品質（データクオリティ）</a></h3>
+<p><strong>高品質なデータ＝正確性・完全性・一貫性・関連性が高く、代表性があり、アクセス可能なデータ</strong><br>生成AIでは、モデルの性能や出力の信頼性は<strong>訓練データの品質</strong>に大きく依存しています。<br>高品質なデータを用いることで、AIの出力はより正確かつ一貫性のあるものになります。<br>以下のような観点が特に重要です：</p>
+<ul><li><strong>正確性（Accuracy）</strong>：データが事実に基づいて正しい</li><li><strong>完全性（Completeness）</strong>：必要な情報が欠けずにそろっている</li><li><strong>一貫性（Consistency／整合性）</strong>：データ間で矛盾がない</li><li><strong>代表性（Representativeness）</strong>：現実の多様なケースが反映されている</li><li><strong>関連性（Relevance）</strong>：目的やタスクに関係のあるデータである</li><li><strong>アクセス可能性（Accessibility）</strong>：すぐ使える適切な形式で用意されている</li></ul>
+<p class="callout note">公式ガイドは「質の高いデータ」を <strong>正確性・完全性・整合性・関連性</strong>の高いデータと定義し、別項目として <strong>アクセス可能なデータ</strong>（すぐに利用可能で、適切な形式であること）を挙げています。<strong>代表性</strong>は公平性の観点で重要なため、あわせて押さえておくとよいです。</p>
+<h4 class="sub-title">正確性（Accuracy）</h4>
+<p><strong>正確性＝データが事実に基づいて正しいこと</strong><br>データが事実に基づいて正確である必要があります。<br>不正確な情報が含まれていると、AIの出力にも誤りが現れやすくなります。<br>たとえば商品マスタの価格が古いまま登録されていると、それを学習・参照した AI は誤った価格を自信ありげに答えます。</p>
+<p class="callout note">「誤字がない」だけでなく、<strong>測定値やラベル付けが正しい</strong>ことも含みます。ラベルが間違っていれば、モデルは間違った基準をそのまま学習します。</p>
+<h4 class="sub-title">完全性（Completeness）</h4>
+<p><strong>完全性＝必要な情報が欠けずにそろっていること</strong><br>必要な情報が抜け落ちていないことが重要です。<br>データの抜けや欠損が多いと、AIは偏った理解をしてしまう可能性があります。<br>たとえば顧客データの「年齢」が半分の行で空欄だと、年齢に関する傾向を正しく学習できません。</p>
+<p class="callout note">欠損を平均値などで機械的に埋めると、かえって実態からずれることもあります。「なぜ欠けているのか」を確認することが重要です。</p>
+<h4 class="sub-title">一貫性（Consistency／整合性）</h4>
+<p><strong>一貫性＝データ間で表記や内容に矛盾がないこと</strong><br>データ間で矛盾がないことが求められます。<br>矛盾する情報が混在していると、AIが誤った結論を導く原因になります。<br>たとえば次のようなケースです：</p>
+<ul><li>同じ顧客が、別のテーブルでは違う住所になっている</li><li>日付が「2026/08/04」と「04-08-2026」で混在している</li><li>金額の単位が、円とドルで混ざっている</li><li>同じ意味のカテゴリが「東京都」「東京」「Tokyo」と表記ゆれしている</li></ul>
+<p class="callout note">公式ガイドの日本語版では <strong>整合性</strong> と表記されますが、いずれも Consistency のことです。<strong>複数のシステムからデータを集めるときに最も崩れやすい</strong>観点です。</p>
+<h4 class="sub-title">代表性（Representativeness）</h4>
+<p><strong>代表性＝現実の多様なケースがデータに反映されていること</strong><br>現実の多様なケースを反映したデータが含まれていることで、特定のグループや状況に偏らない公平な出力が可能になります。<br>たとえば特定の地域・年代の利用者しか含まないデータで学習すると、それ以外の利用者に対して精度が落ちたり、不公平な扱いをしたりします。</p>
+<p class="callout warn">代表性が欠けると <strong>バイアス</strong> が生じ、Responsible AI の<strong>公平性（Fairness）</strong>を損ないます。<strong>データ量を増やすだけでは解決しません</strong>。件数ではなく「偏りなく集まっているか」が問われます。</p>
+<h4 class="sub-title">関連性（Relevance）</h4>
+<p><strong>関連性＝目的やタスクに関係のあるデータであること</strong><br>モデルの目的やタスクに関連するデータが使われていることが重要です。<br>無関係な情報はノイズとなり、出力の質を下げてしまいます。<br>たとえば問い合わせ対応の AI を作るのに、無関係な社内イベントの記録まで大量に混ぜると、検索精度も回答精度も下がります。</p>
+<p class="callout note">「多ければ良い」わけではなく、<strong>目的に照らして選ぶ</strong>ことが品質につながります。</p>
+<h4 class="sub-title">アクセス可能性（Accessibility）</h4>
+<p><strong>アクセス可能性＝必要なときにすぐ使える、適切な形式で用意されていること</strong><br>モデルをトレーニングするためのデータは、すぐに利用可能で、適切な形式でなければなりません。<br>どこかに存在していても、権限がなくて取り出せない、部署ごとにサイロ化して散在している、形式がばらばらで前処理できないといった状態では活用できません。</p>
+<p class="callout note">品質の良いデータを持っていても「使えない」なら価値を生みません。データ基盤の整備が生成AI活用の前提になる、という文脈で問われます。</p>
+</article>
+<article class="term" id="t18" data-term="t18">
+<h3 class="term-title"><a class="anchor" href="#t18">Garbage in, Garbage out（GIGO）</a></h3>
+<p>GIGOは「入力がゴミなら、出力もゴミになる」という考え方です。<br>機械学習では特に、次のような“データの問題”があると、モデル側で頑張っても限界が出ます。</p>
+<ul><li><strong>欠損</strong>：必要な項目が抜けている</li><li><strong>ラベル誤り</strong>：正解ラベルが間違っている、付与基準がぶれている</li><li><strong>偏り（バイアス）</strong>：特定の属性・条件のデータに偏っている</li><li><strong>重複・ノイズ</strong>：同じデータの重複や、無関係な情報の混入</li><li><strong>陳腐化</strong>：データが古く、現状を反映していない</li><li><strong>不整合</strong>：データ間で内容が矛盾している</li></ul>
+<p>GIGOは <strong>「モデル改善より先に、データ品質・前処理・ラベリング・特徴量を疑うべき場面が多い」</strong>という実務的な教訓でもあります。</p>
+</article>
+<article class="term" id="t19" data-term="t19">
+<h3 class="term-title"><a class="anchor" href="#t19">データ依存性</a></h3>
+<p><strong>データ依存性＝モデルの性能や出力品質が、トレーニングデータの質・量・偏りに左右される性質</strong><br>データ依存性（data dependency）とは、基盤モデルの性能や出力品質が、学習に使われたデータの質、量、多様性、バランスに強く影響される性質のことです。<br>そのため、モデルのアーキテクチャやパラメータ数を改善するよりも、データを整えることのほうが効果的な場面が多くあります。</p>
+<p class="callout note">この性質から生じる代表的な問題が <strong>バイアス</strong>（偏りが出力に反映される）と <strong>知識カットオフ</strong>（学習時点以降を知らない）です。</p>
+</article>
+<article class="term" id="t20" data-term="t20">
+<h3 class="term-title"><a class="anchor" href="#t20">データの区分（ゼロパーティ〜サードパーティ）</a></h3>
+<p><strong>誰から・どのように得たデータかによる4つの区分</strong><br>AI やマーケティングでデータを扱うとき、<strong>入手経路と同意の明確さ</strong>によってデータを次の4つに区分します。手前にあるものほど信頼性と同意の明確さが高く、外側になるほど幅は広がるが精度と正当性の確認が必要になります。</p>
+<ul><li><strong>ゼロパーティ データ（Zero-party data）</strong>：顧客が<strong>自ら能動的・意図的に提供した</strong>データ。アンケートの回答、好みの設定、購入意向、プロフィール入力など。同意が最も明確で信頼性が高い。</li><li><strong>ファーストパーティ データ（First-party data）</strong>：<strong>自社が自社の接点で直接収集した</strong>データ。購買履歴、サイトやアプリの行動ログ、CRM、社内マニュアル、契約書など。</li><li><strong>セカンドパーティ データ（Second-party data）</strong>：<strong>他社のファーストパーティ データを、提携や許諾のもとで直接共有してもらった</strong>データ。パートナー企業との相互提供などが典型。</li><li><strong>サードパーティ データ（Third-party data）</strong>：<strong>第三者のデータ提供事業者から購入・取得する</strong>データ。業界レポート、専門データベース、広く集約された統計など。自社では持てない領域を補える。</li></ul>
+<p class="callout note"><strong>ゼロパーティとファーストパーティの違い</strong>は「顧客が意識して差し出したか」です。行動ログは本人が意識せず溜まるファーストパーティ、アンケート回答は本人が意図して答えるゼロパーティにあたります。</p>
+<p class="callout note">外側（サードパーティ）に行くほど、<strong>取得の適法性・同意の有無・鮮度</strong>を自社で確認する責任が重くなります。プライバシー規制の強化で、ゼロパーティ／ファーストパーティ データの重要性が高まっています。</p>
+<p class="callout note">グラウンディングの情報源としての整理（ファーストパーティ／サードパーティ／ワールド データ）は、第4章の<strong>グラウンディング</strong>を参照してください。</p>
+</article>
+<article class="term" id="t21" data-term="t21">
+<h3 class="term-title"><a class="anchor" href="#t21">特徴量エンジニアリング（Feature Engineering）</a></h3>
+<p><strong>特徴量エンジニアリング＝元データから、モデルが学習しやすい入力変数（特徴量）を設計・変換・生成すること</strong><br>特徴量エンジニアリング（Feature Engineering）は、機械学習モデルがより効果的に学習できるよう、元データから有用な入力変数（特徴量）を設計・変換・生成するプロセスです。<br>たとえば「生年月日」から「年齢」を計算する、「購入日時」から「曜日」「時間帯」を切り出す、カテゴリ名を数値に変換する、といった加工がこれにあたります。</p>
+<p class="callout note"><strong>ML ライフサイクルの「①データの取り込みと準備」</strong>にあたる作業で、モデルの精度を左右する重要な工程です。</p>
+<p class="callout note"><strong>AutoML</strong> はこの特徴量エンジニアリングを自動化してくれる仕組みで、作った特徴量を一元管理・再利用するのが <strong>Feature Store</strong> です。</p>
+</article>
+<article class="term" id="t22" data-term="t22">
+<h3 class="term-title"><a class="anchor" href="#t22">エンベディング（埋め込み）</a></h3>
+<p><strong>エンベディング＝意味や特徴を数値ベクトルで表現し、類似性を計算できるようにする手法</strong><br>エンベディング（埋め込み）とは、<strong>テキスト、画像、音声、動画などのデータを、ベクトルと呼ばれる数値の配列に変換する手法</strong>です。<br>意味が近いデータほどベクトル空間上で近い位置に配置されるため、ベクトル同士の距離（類似度）を計算することで「意味的に似ているもの」を探せます。<br>この仕組みは、<strong>セマンティック検索、レコメンデーション、そして RAG における関連文書の検索</strong>の土台になっています。</p>
+</article>
+<article class="term" id="t23" data-term="t23">
+<h3 class="term-title"><a class="anchor" href="#t23">ベクトル検索</a></h3>
+<p><strong>ベクトル検索＝エンベディング化したデータをインデックス化し、意味的類似性に基づいて高速検索する仕組み</strong><br>Agent Platform のベクトル検索（Vector Search）は、<strong>テキストや画像などのデータをエンベディングと呼ばれる数値ベクトルに変換し、意味的な近さに基づいて検索できる仕組み</strong>です。<br>大量のベクトルをインデックス化して保持することで、膨大なデータの中から「意味の近いもの」を高速に取り出せます。</p>
+<p class="callout note">RAG では、この仕組みで「質問に関連する文書」を探し出す部分を担います。</p>
+</article>
+<article class="term" id="t24" data-term="t24">
+<h3 class="term-title"><a class="anchor" href="#t24">セマンティック検索</a></h3>
+<p>セマンティック検索は、<strong>単なるキーワードの一致だけではなく、検索意図や意味（セマンティクス）を理解して情報を検索する手法</strong>です。<br>従来の検索との違い： 伝統的なキーワード検索は、入力した文字列と一致するページや文書を探すだけですが、セマンティック検索は、検索の背景となる意味やコンテキストを理解して、より適切な回答や情報を提供します。</p>
+</article>
+<article class="term" id="t25" data-term="t25">
+<h3 class="term-title"><a class="anchor" href="#t25">Googleナレッジグラフ（Knowledge Graph）</a></h3>
+<p><strong>エンティティとその関係性を構造化し、意味に基づいた情報理解を可能にする仕組み</strong><br>Googleナレッジグラフは、人・場所・物などのエンティティとそれらの関係性を構造化データとして整理し、検索における意味理解（セマンティック検索）を可能にする仕組みです。<br>単なるキーワード一致ではなく、「それが何であるか」を理解することで、より正確で関連性の高い情報提供を実現します。<br>これは、RAGやグラウンディングのように信頼できる知識を活用する基盤としても重要です。</p>
+</article>
+</section>
+<section class="chapter" id="c3" data-chapter="c3">
+<h2 class="chapter-title">第3章 生成AIの基礎と限界</h2>
+<article class="term" id="t26" data-term="t26">
+<h3 class="term-title"><a class="anchor" href="#t26">生成AI（GenAI）</a></h3>
+<p>生成AIモデルは、文章、画像、コード、音声、動画などの形式で新しいコンテンツを生成することができる、高度に訓練された<strong>モデル</strong>です。<br>これは、パターン認識に基づいて過去のデータから学習することにより可能になります。</p>
+</article>
+<article class="term" id="t27" data-term="t27">
+<h3 class="term-title"><a class="anchor" href="#t27">基盤モデル（foundation model）</a></h3>
+<p>基盤モデル（foundation model）は、<strong>大量かつ多様なデータで事前訓練され、さまざまなタスクに応用できる汎用的な AI モデル</strong>です。<br>テキスト、画像、コード、音声などのデータから広くパターンを学習し、その知識をもとに生成、分類、要約、翻訳、質問応答などに対応できます。<br>特定の1つの用途だけに作られたモデルではなく、必要に応じてプロンプト設計、ファインチューニング、RAG などを組み合わせることで、業務やアプリケーションに合わせて活用できます。<br>生成 AI やエージェント型 AI の多くは、このような基盤モデルを土台として動作しています。</p>
+<p class="callout note">基盤モデルはコンセプトやカテゴリー（汎用的なAIモデルそのもの）を指し、さまざまな企業や研究者が開発。</p>
+<h4 class="sub-title">基盤モデルの利用が妥当ではない主な理由</h4>
+<p>生成AIの基盤モデルは、<strong>文章生成や文脈理解など柔軟なタスクに強い一方で、決定論的（同じ入力に対して必ず同じ結果になる）な判断処理には向いていません</strong>。<br>生成AIは確率的に回答を生成する仕組みのため、状況によって出力が変わる可能性があります。</p>
+<p>そのため、次のようなケースでは基盤モデルではなく、従来型の機械学習モデルやルールベースの処理を選ぶほうが適切です。</p>
+<ul><li><strong>毎回まったく同じ結果が求められる処理</strong>：税額や手数料の計算、在庫数の引き当て、与信の可否判定など</li><li><strong>監査や説明責任が厳格に求められる判断</strong>：根拠を一意に示す必要がある領域</li><li><strong>単純な数値予測・分類で十分なタスク</strong>：売上予測や解約予測など。専用モデルのほうが軽量・高精度・低コスト</li><li><strong>極めて低いレイテンシやコストが要求される処理</strong>：大量のトランザクションをリアルタイムに捌く場面</li></ul>
+<p class="callout warn">「生成AIを使うべきか」を問う設問では、<strong>確率的（非決定的）である</strong>という性質が判断の分かれ目になります。厳密性・再現性が要求される処理は、生成AIの不得意分野です。</p>
+</article>
+<article class="term" id="t28" data-term="t28">
+<h3 class="term-title"><a class="anchor" href="#t28">大規模言語モデル（LLM）</a></h3>
+<p><strong>大量データで訓練され、幅広い文脈理解と言語タスクに対応できるモデル</strong><br>大規模言語モデル（LLM）は、膨大なテキストデータを使って訓練され、人間の言語を理解したり生成したりするための AI モデルです。文章の流れや文脈をもとに、次に続く語句や適切な回答を予測できます。</p>
+</article>
+<article class="term" id="t29" data-term="t29">
+<h3 class="term-title"><a class="anchor" href="#t29">SLM（Small Language Model／小規模言語モデル）</a></h3>
+<p><strong>SLM＝LLM より小さく、少ない計算資源で動く言語モデル</strong><br>SLM（Small Language Model）は、<strong>LLMよりもモデルサイズが小さく、計算資源を抑えて動作可能な言語モデル</strong>です。<br>特徴：</p>
+<ul><li><strong>軽量・高速</strong>：モバイル端末やエッジデバイスでの利用に適している</li><li><strong>応答速度が速い</strong>：通信なしで即時応答が可能</li><li><strong>Gemini Nano</strong> のような SLM は、スマートフォンなどのローカル環境で活用されている</li><li><strong>プライバシー対応</strong>：データがクラウドに送信されず端末内で完結できる</li></ul>
+<p>代表的な SLM には、Google の <strong>Gemma シリーズ</strong> や Microsoft の Phi シリーズ があります。</p>
+<p class="callout note">LLM と比べて<strong>汎用的な知識量や複雑な推論力は劣る</strong>ため、「軽さ・速さ・プライバシー」と「精度」のトレードオフで選びます。</p>
+<p class="callout note">大きなモデルの振る舞いを小さなモデルに学習させる<strong>蒸留（Distillation）</strong>は、SLM を作る代表的な手法です。</p>
+</article>
+<article class="term" id="t30" data-term="t30">
+<h3 class="term-title"><a class="anchor" href="#t30">モダリティ</a></h3>
+<p>モダリティは、<strong>生成AIモデルが入力・出力として扱えるデータの種類</strong>（例: テキスト、画像、音声、動画など）を意味します。</p>
+<ul><li>単一モダリティモデル：テキスト生成や音声合成など、1種類のデータに特化。</li><li>マルチモーダルモデル：画像キャプション生成や音声付き動画の生成など、複数のモダリティを統合して扱える。</li></ul>
+<p>モデルを選択する際には、アプリケーションが必要とするモダリティに適合しているかを考慮することが重要です。<br>近年では、Gemini をはじめとする主要な基盤モデルの多くが、マルチモーダルAI として進化しています。</p>
+</article>
+<article class="term" id="t31" data-term="t31">
+<h3 class="term-title"><a class="anchor" href="#t31">Transformer（トランスフォーマー）</a></h3>
+<p><strong>Transformer＝自己注意機構を中核に、文中の語どうしの関係を並列に捉えるニューラルネットワーク構造</strong><br>Transformer は、<strong>現在の大規模言語モデル（LLM）や生成AIの土台になっているモデルアーキテクチャ</strong>です。<br>2017年に Google の研究者が発表した論文「Attention Is All You Need」で提案されました。</p>
+<p>それ以前の主流だった RNN や LSTM は、文章を<strong>単語の順に1つずつ</strong>処理する必要があり、長い文の離れた語の関係を捉えにくく、並列計算もしにくいという弱点がありました。<br>Transformer は<strong>文全体を一度に見て、語どうしの関係を直接計算する</strong>ため、長文の文脈を保持しやすく、GPU / TPU による並列学習にも向いています。この性質が、モデルの大規模化（＝LLM の実現）を可能にしました。</p>
+<p class="callout note">名前の由来どおり「変換」を担う構造で、翻訳・要約・生成など幅広いタスクに応用されています。Gemini や Gemma も Transformer 系のモデルです。</p>
+<h4 class="sub-title">自己注意機構（Self-Attention）</h4>
+<p><strong>自己注意機構＝文中の各単語が、他のどの単語に注目すべきかを重みとして計算する仕組み</strong><br>自己注意機構（Self-Attention）は Transformer の中核をなす仕組みで、<strong>入力された文の中の各単語について、同じ文の他の単語との関連の強さを数値（重み）として算出</strong>します。</p>
+<p>たとえば「その動物は疲れていたので、<strong>それ</strong>は道を渡らなかった」という文で、「それ」が「動物」を指すと判断するには、離れた位置にある語との結びつきを捉える必要があります。<br>自己注意機構は、この「どの語に注目すべきか」を学習によって獲得します。</p>
+<ul><li>各単語は、他のすべての単語に対する<strong>注目度（Attention Weight）</strong>を持つ</li><li>注目度が高い語の情報を重く反映して、その単語の意味表現を作り直す</li><li>これを何層も重ねることで、文法・照応関係・文脈といった複雑な関係を段階的に捉える</li></ul>
+<p class="callout note"><strong>「自己」注意</strong>と呼ぶのは、外部ではなく<strong>同じ入力の内部で</strong>注目関係を計算するためです。</p>
+<p class="callout note">文中のすべての語のペアについて計算するため、入力が長くなると計算量が急増します。これが<strong>コンテキストウィンドウ</strong>に上限がある理由の一つです。</p>
+</article>
+<article class="term" id="t32" data-term="t32">
+<h3 class="term-title"><a class="anchor" href="#t32">拡散モデル（Diffusion Model）</a></h3>
+<p><strong>拡散モデル＝ノイズを加える過程を学び、逆にノイズを除去して高品質なデータを生成する手法</strong><br>拡散モデル（Diffusion Model）は、生成 AI で使われる代表的な手法の一つです。<br>学習時には、画像などのデータに少しずつノイズを加えていき、元の情報が失われていく過程を学習します。<br>生成時には、その逆の流れで、ノイズから少しずつ不要な成分を取り除き、意味のある画像やデータを作り出します。この仕組みにより、細部まで自然で高品質な画像を生成しやすい点が特徴です。<br>特に、テキストから画像を生成するモデルでよく使われており、Imagen もその代表例として押さえておくとよいです。</p>
+<p class="callout note">商品の質感、背景、照明、構図などを反映した<strong>高精細な画像生成</strong>に向いています。「写真のようなリアルな画像がほしい」という要件では、拡散モデル（Imagen）が第一候補になります。</p>
+</article>
+<article class="term" id="t33" data-term="t33">
+<h3 class="term-title"><a class="anchor" href="#t33">トークン</a></h3>
+<p><strong>トークン＝モデルがテキストを処理する際の最小単位</strong><br>単語そのものではなく、単語の一部や記号に分割された単位で、モデルは入力と出力をトークン単位で扱います。<br>コンテキストウィンドウの上限も、API の課金も、通常はトークン数を基準に計算されます。</p>
+</article>
+<article class="term" id="t34" data-term="t34">
+<h3 class="term-title"><a class="anchor" href="#t34">コンテキストウィンドウ</a></h3>
+<p><strong>コンテキストウィンドウ＝モデルが一度に参照できるトークン量の上限</strong><br>コンテキストウィンドウとは、<strong>生成 AI や LLM が一度の処理で参照できる情報量の上限</strong>を指します。<br>通常はトークン数で表され、入力されたプロンプト、会話履歴、参照文書、モデルの回答などがこの範囲に含まれます。</p>
+</article>
+<article class="term" id="t35" data-term="t35">
+<h3 class="term-title"><a class="anchor" href="#t35">レイテンシ</a></h3>
+<p><strong>レイテンシ＝プロンプトを受け取ってから応答を返し終えるまでにかかる時間</strong><br>レイテンシとは、<strong>モデルが入力プロンプトを受け取ってから、レスポンスを生成し終えるまでにかかる時間</strong>を示す指標です。<br>これはモデルの応答速度を評価するうえで最も重要な要素のひとつです。</p>
+<p class="callout note">一般に大きなモデルほど精度は高いがレイテンシとコストも増えるため、モデル選定では<strong>精度・レイテンシ・コストのトレードオフ</strong>を考えます。</p>
+<h4 class="sub-title">Time To First Token（TTFT）</h4>
+<p>モデルがプロンプトを受け取ってから、<strong>最初のトークンを生成するまでの時間</strong>です。<br>応答が少しずつ表示される（ストリーミング）UI では、ユーザーが「速い／遅い」と体感する部分がここになります。</p>
+<h4 class="sub-title">Time To Last Token（TTLT）</h4>
+<p>モデルが応答を<strong>最後まで出力し終えるまでの合計時間</strong>です。<br>バッチ処理や、回答全体がそろってから次の処理に渡す用途では、こちらが重要になります。</p>
+</article>
+<article class="term" id="t36" data-term="t36">
+<h3 class="term-title"><a class="anchor" href="#t36">知識カットオフ（knowledge cutoff）</a></h3>
+<p><strong>知識カットオフ＝モデルが学習した情報の最終時点であり、それ以降の情報は知らない可能性がある特性</strong><br>知識カットオフ（knowledge cutoff）とは、生成 AI モデルが<strong>学習に使用したデータの最終時点</strong>を指します。<br>モデルは、その時点までの情報をもとに訓練されているため、カットオフ以降に起きた出来事や更新された情報については、基本的に知識として持っていません。<br>そのため、最新ニュース、現在の価格、最新の製品仕様、法改正、試験ガイドの更新などについては、モデル単体の知識だけでは不正確になる可能性があります。<br>最新情報が必要な場合は、検索、RAG、グラウンディングなどを使って、外部の最新データを参照させることが重要です。</p>
+<h4 class="sub-title">具体例</h4>
+<p>たとえば、2023年までのデータで訓練されたモデルは、2024年のパリ五輪の結果や、2025年時点の為替相場を学習データとして持っていません。<br>そのため、最新情報を答えるには、検索や外部データベースとの連携が必要になります。</p>
+</article>
+<article class="term" id="t37" data-term="t37">
+<h3 class="term-title"><a class="anchor" href="#t37">ハルシネーション（Hallucination）</a></h3>
+<p><strong>ハルシネーション＝もっともらしいが事実と異なる内容を生成してしまう現象</strong><br>生成 AI は「次に来る可能性が高い語」を予測して文章を作るため、学習データに存在しない情報や誤った情報を、<strong>自信ありげに</strong> 出力してしまうことがあります。<br>主な原因には、学習データの不足・偏り・古さ、曖昧なプロンプト、根拠データの欠如などがあります。<br>対策としては、<strong>RAG／グラウンディング</strong>、プロンプトの具体化、出典の提示、<strong>人間による確認（Human-in-the-loop）</strong> が挙げられます。</p>
+</article>
+<article class="term" id="t38" data-term="t38">
+<h3 class="term-title"><a class="anchor" href="#t38">非決定性</a></h3>
+<p><strong>非決定性＝同じ入力でも出力が変わることがある性質</strong><br>生成 AI における非決定性とは、<strong>同じプロンプトを入力しても、毎回まったく同じ出力になるとは限らない性質</strong>のことです。<br>モデルが次のトークンを確率的にサンプリングして選ぶため、実行するたびに表現や結論が変わり得ます。</p>
+<p class="callout note">温度（Temperature）を下げると出力は安定に近づきますが、<strong>完全に同一の出力が保証されるわけではありません</strong>。</p>
+<p>そのため、テストの再現性確保や監査が必要な業務では、出力のログ保存や人間による確認を組み合わせます。</p>
+</article>
+<article class="term" id="t39" data-term="t39">
+<h3 class="term-title"><a class="anchor" href="#t39">バイアス（bias）</a></h3>
+<p><strong>バイアス＝訓練データの偏りが出力に反映され、公平性を損なう可能性がある課題</strong><br>生成 AI モデルにおけるバイアスとは、学習に使われたデータに含まれる偏りが、モデルの出力に反映されてしまう課題です。<br>訓練データには、社会的・文化的な偏見、特定の属性に対するステレオタイプ、過去の判断の偏りなどが含まれている場合があります。<br>モデルがそれらを学習すると、特定の性別、年齢、地域、職業、文化などに対して不公平な出力をする可能性があります。</p>
+<p class="callout note">Responsible AI の<strong>公平性（Fairness）</strong>が対応する課題そのものです。データの代表性を高める、出力を評価・監視する、人間が確認するなどで軽減します。</p>
+</article>
+<article class="term" id="t40" data-term="t40">
+<h3 class="term-title"><a class="anchor" href="#t40">エッジケース（edge case）</a></h3>
+<p><strong>通常の想定から外れる、まれ・極端・境界的・想定外のケース</strong><br>エッジケース（Edge Case）とは、通常の利用パターンや想定される入力から外れた、<strong>まれ・極端・境界的・想定外のケース</strong>を指します。<br>モデルは大量のデータから一般的なパターンを学習しますが、学習データにほとんど含まれていない入力や、想定外の条件が組み合わさった入力に対しては、正しく対応できない場合があります。<br>その結果、誤った回答、不自然な出力、指示の誤解、予測精度の低下などが起こることがあります。</p>
+</article>
+</section>
+<section class="chapter" id="c4" data-chapter="c4">
+<h2 class="chapter-title">第4章 モデルを使いこなす（カスタマイズ手法）</h2>
+<article class="term" id="t41" data-term="t41">
+<h3 class="term-title"><a class="anchor" href="#t41">プロンプトエンジニアリング</a></h3>
+<p><strong>プロンプトエンジニアリング＝望む出力を得るために、モデルへの指示（プロンプト）を設計・改善する技術</strong><br>代表的な手法は以下のとおりです。</p>
+<ul><li><strong>Zero-shot プロンプト</strong>：例を一切与えず、指示だけで実行させる</li><li><strong>One-shot / Few-shot プロンプト</strong>：1つ／少数の例を示して、出力の形式や方向性を学ばせる</li><li><strong>Chain-of-Thought（思考の連鎖）</strong>：「順を追って考えて」と指示し、推論の途中経過を出させることで複雑な問題の精度を上げる</li><li><strong>ロールプロンプト</strong>：「あなたは経験豊富な法務担当です」のように役割を与える</li><li><strong>プロンプトチェーン</strong>：複数のプロンプトを段階的につなぎ、前の出力を次の入力にする</li></ul>
+<p>良いプロンプトの要素は、<strong>明確な指示・十分な文脈・出力形式の指定・制約条件</strong>です。</p>
+<p class="callout note">主要な手法は、この後の各セクションで個別に整理しています。</p>
+</article>
+<article class="term" id="t42" data-term="t42">
+<h3 class="term-title"><a class="anchor" href="#t42">ゼロショットプロンプティング（zero-shot prompting）</a></h3>
+<p><strong>zero-shot prompting＝例を一切与えず、指示だけでタスクを実行させる手法</strong><br>ゼロショットプロンプティングは、<strong>プロンプト内に入出力例をまったく含めず、やってほしいことの指示だけを与えてモデルに実行させる方法</strong>です。<br>基盤モデルは事前学習の段階で幅広いタスクを学んでいるため、例を示さなくても指示の意図を汲んで応答できます。<br>「この文章を要約して」「次のレビューをポジティブかネガティブか判定して」といった、一般的で分かりやすいタスクに向いています。<br>ワンショット（1例）やフューショット（複数例）と比較して、<strong>プロンプトが短くトークン消費を抑えられる</strong>という利点があります。</p>
+<p class="callout note">一方で、出力形式が指定どおりにならない、判断基準がぶれるといったことが起きやすくなります。<strong>安定性が必要ならフューショットに切り替える</strong>のが定石です。</p>
+<p class="callout note">まずゼロショットで試し、期待どおりでなければ例を足していく、という順序で検討します。</p>
+</article>
+<article class="term" id="t43" data-term="t43">
+<h3 class="term-title"><a class="anchor" href="#t43">フューショットプロンプティング（few-shot prompting）</a></h3>
+<p><strong>few-shot prompting＝いくつかの入出力例を示して、期待する応答パターンに誘導する手法</strong><br>フューショットプロンプティングは、<strong>プロンプト内に複数の入出力例（通常2〜5件程度）を含めることで、モデルにタスクの意図や応答形式を示し、出力の品質や一貫性を向上させる方法</strong>です。<br>ゼロショット（例なし）やワンショット（1例）と比較して、より安定した応答が得られやすくなります。</p>
+<p class="callout note">モデルを再学習させているわけではなく、<strong>プロンプト内で例を見せているだけ</strong>である点がファインチューニングとの違いです。</p>
+</article>
+<article class="term" id="t44" data-term="t44">
+<h3 class="term-title"><a class="anchor" href="#t44">Chain of Thought（思考の連鎖）</a></h3>
+<p><strong>Chain of Thought＝複雑な問題に対して、段階的な理由付けや中間ステップを促すプロンプト技法</strong><br>Chain of Thought（CoT）プロンプティングは、モデルにいきなり答えだけを出させるのではなく、<strong>問題を段階的に整理して考えるよう促すプロンプト手法</strong>です。<br>計算問題、論理推論、複数条件の判断など、途中の筋道が必要なタスクで精度が上がりやすくなります。</p>
+<p class="callout note">中間の推論を出力させるためトークン消費とレイテンシが増える点はトレードオフです。</p>
+</article>
+<article class="term" id="t45" data-term="t45">
+<h3 class="term-title"><a class="anchor" href="#t45">ロールプロンプティング（Role Prompting / ロールプロンプト）</a></h3>
+<p><strong>ロールプロンプティング＝モデルに役割や視点を与えて、回答の方向性やトーンを制御する手法</strong><br>ロールプロンプティング（Role Prompting）は、生成 AI に<strong>特定の役割や立場を与えることで、応答の内容、視点、トーンを調整するプロンプト設計手法</strong>です。<br>たとえば、「あなたは経験豊富なデータサイエンティストです」「あなたは小学生に説明する先生です」のように指定すると、モデルはその役割に合った説明の仕方や言葉遣いで回答しやすくなります。<br>与える役割のことを<strong>ペルソナ（persona）</strong>と呼ぶこともあります。</p>
+<h4 class="sub-title">役割を与えると何が変わるか</h4>
+<ul><li><strong>語彙と専門性</strong>：その分野で使われる用語や言い回しが選ばれやすくなる</li><li><strong>説明の粒度</strong>：「小学生に教える先生」なら平易に、「専門家向け」なら前提を省いて詳しく</li><li><strong>トーン</strong>：フォーマル／カジュアル、慎重／断定的などの文体</li><li><strong>着目する観点</strong>：同じ資料でも、法務担当ならリスク、マーケターなら訴求点に目が向く</li></ul>
+<h4 class="sub-title">書き方のコツ</h4>
+<ul><li><strong>役割 ＋ 対象読者 ＋ 目的</strong>をセットで指定する（例：「あなたは法務担当です。<strong>経営会議向けに</strong>、この契約書の<strong>リスクを3点</strong>挙げてください」）</li><li>「専門家」だけでは曖昧なので、<strong>分野・経験・立場</strong>まで具体化する</li><li>出力形式（箇条書き、文字数、表現の硬さ）も併せて指定すると安定する</li><li>対話全体で役割を固定したい場合は、毎回書くのではなく<strong>システムインストラクション</strong>として設定する</li></ul>
+<h4 class="sub-title">具体例</h4>
+<p>同じ「新しい保険商品について説明して」という依頼でも、役割によって出力が変わります。<br><strong>役割なし</strong>：一般的な保険の仕組みを網羅的に説明する。<br><strong>「あなたは保険の営業担当です。初めて保険を検討する20代に説明してください」</strong>：専門用語を避け、生活シーンに沿ったメリットを中心に説明する。<br><strong>「あなたは保険商品を審査する金融庁の担当者です」</strong>：約款の妥当性、リスク開示、法令適合性といった観点で指摘する。</p>
+<p class="callout warn"><strong>役割を与えても、モデルが持っていない知識が増えるわけではありません。</strong> 変わるのは表現の仕方や着目点であり、事実の正確さが保証されるものではないため、<strong>ハルシネーション対策にはなりません</strong>。正確さが必要な場合は RAG／グラウンディングを併用します。</p>
+<p class="callout note">「あなたは医師です」のように専門家を演じさせても、その回答が専門家の判断として妥当だとは限らない点に注意が必要です。</p>
+</article>
+<article class="term" id="t46" data-term="t46">
+<h3 class="term-title"><a class="anchor" href="#t46">プロンプトチェーン（Prompt Chaining／プロンプトチェイニング）</a></h3>
+<p><strong>プロンプトチェイニング＝一つのプロンプトの出力を、次のプロンプトの入力として使う手法</strong><br>プロンプトチェーン（Prompt Chaining）とは、<strong>複数のプロンプトを段階的につなげて、AIにより複雑なタスクや対話文脈を処理させる手法</strong>です。<br>これにより、複雑なタスクを段階的に処理することができます。<br>各プロンプトの出力が次のプロンプトの入力となるため、思考の連続性や一貫性のある回答が求められるシナリオに適しています。Geminiやエージェント型アプリケーションでよく利用されます。</p>
+<p class="callout note">1回のプロンプト内で考えさせる Chain of Thought とは異なり、<strong>複数回の呼び出しに分けて処理をつなぐ</strong>のがプロンプトチェーンです。</p>
+</article>
+<article class="term" id="t47" data-term="t47">
+<h3 class="term-title"><a class="anchor" href="#t47">メタプロンプティング</a></h3>
+<p><strong>メタプロンプティング＝AI に「プロンプトそのもの」を生成・評価・改善させる技法</strong><br>メタプロンプティングは、AIに「他のプロンプトを生成・評価・改善させる」ための技法です。<br>メタプロンプトは、AIのアウトプットを向上させるためのプロンプト自体を構築・最適化するという、高度なプロンプト設計技術です。<br>たとえば「次の目的を達成するのに最適なプロンプトを3案作り、それぞれの長所と短所を挙げてください」と依頼するのがメタプロンプティングにあたります。</p>
+<p class="callout note">人間がプロンプトを試行錯誤する手間を、AI 自身に肩代わりさせる発想です。プロンプト改善のサイクルを速められます。</p>
+<p class="callout note">生成させたプロンプトが本当に良いかは、<strong>Gen AI Evaluation Service</strong> などで客観的に評価して確かめます。</p>
+</article>
+<article class="term" id="t48" data-term="t48">
+<h3 class="term-title"><a class="anchor" href="#t48">プロンプトテンプレート</a></h3>
+<p><strong>プロンプトテンプレート＝モデルへの入力例や指示文を、再利用できる形にひな形化したもの</strong><br>プロンプトテンプレートは、モデルへの入力例や指示文を再利用するためのものです。<br>「役割・前提・指示・出力形式」といった共通部分をあらかじめ固定し、都度変わる部分だけを変数として差し替えて使います。<br>たとえば「あなたは{役割}です。次の{対象}を{文字数}字で要約してください」のように作っておき、`{ }` の中身を入れ替えて運用します。</p>
+<p class="callout note"><strong>品質のばらつきを抑える</strong>（毎回ゼロから書かない）、<strong>組織で共有できる</strong>、<strong>改善を一箇所に反映できる</strong>といった利点があります。</p>
+<p class="callout note">Agent Studio ではプロンプトを保存・管理でき、テンプレートとして使い回せます。</p>
+</article>
+<article class="term" id="t49" data-term="t49">
+<h3 class="term-title"><a class="anchor" href="#t49">出力を制御するパラメータ</a></h3>
+<ul><li><strong>Temperature（温度）</strong>：出力のランダム性を制御する。低いほど決定的・安定的、高いほど多様・創造的。</li><li><strong>Top-K</strong>：確率が高い上位 K 個の候補の中から次のトークンを選ぶ。</li><li><strong>Top-P（Nucleus Sampling）</strong>：累積確率が P に達するまでの候補の中から次のトークンを選ぶ。</li><li><strong>出力トークン数の上限</strong>：生成される回答の最大の長さを制限する。</li></ul>
+<p class="callout note">Temperature と Top-P は、この後で個別に詳しく整理しています。</p>
+</article>
+<article class="term" id="t50" data-term="t50">
+<h3 class="term-title"><a class="anchor" href="#t50">温度（Temperature）</a></h3>
+<p>温度（temperature）は、生成AIモデルの出力における予測のばらつき（ランダム性）を制御するためのパラメータです。<br>低温度（例：0.2）は安定・一貫した出力を、高温度（例：0.9）は創造的・多様な出力を促します。用途に応じて適切に調整することで、意図に合った応答を得ることができます。<br>事実の正確さが求められるタスクは低め、アイデア出しやコピー作成は高めに設定します。</p>
+<h4 class="sub-title">具体例</h4>
+<p>同じプロンプト「新しいコーヒーのキャッチコピーを作ってください。」に対して、Temperature の値を変更してモデルに生成させます。<br><strong>1. 低いTemperature（例：0.2）</strong><br>論理的で無難なキャッチコピーが生成されます。<br>生成例: 「毎日の始まりに、最高のひとときを。」 「香り高い一杯で、心に潤いを。」<br>特徴: 無難で安全な回答。つまり、多くの人にとって受け入れやすい、一般的な表現となります。<br><strong>2. 高いTemperature（例：0.9）</strong><br>創造的でユニークな、少し変わったキャッチコピーが生成されます。<br>生成例: 「脳みそが、目覚める一口を。」 「孤独な夜に、灯台になる一杯。」<br>特徴: ユニークで独創的な回答。つまり、強い比喩や予期せぬ言葉の組み合わせが使われます。<br>このように、Temperature を低くすると「無難」な答えが、高くすると「独創的」な答えが出やすくなります。タスクに応じて使い分けることで、より意図に沿った結果を得られます。</p>
+</article>
+<article class="term" id="t51" data-term="t51">
+<h3 class="term-title"><a class="anchor" href="#t51">Top-K</a></h3>
+<p>Top-K は、<strong>モデルが次に出力するトークンを決定する際に、最も確率が高い上位 K 個のトークンだけを候補として残す手法</strong>です。<br>これにより、生成されるテキストの「多様性」と「制御性」のバランスをとることができます。</p>
+<ul><li>値が<strong>小さい</strong>ほど、選ばれるトークンの範囲が狭くなり、予測がより<strong>決定的</strong>になります。</li><li>値が<strong>大きい</strong>ほど、選択肢が広がり、生成文がより<strong>ランダム</strong>になります。</li></ul>
+<p class="callout note">候補を K 個に絞ったあとは、一様にランダムではなく、<strong>温度などで調整された確率分布に従ってサンプリング</strong>されます。</p>
+<p class="callout note">候補の<strong>個数</strong>で絞るのが Top-K、候補の<strong>累積確率</strong>で絞るのが Top-P です。</p>
+</article>
+<article class="term" id="t52" data-term="t52">
+<h3 class="term-title"><a class="anchor" href="#t52">Top-P</a></h3>
+<p>Top-P は、生成 AI が次に出力するトークンを選ぶ際の<strong>サンプリング制御手法</strong>です。<br>モデルは次に出力される可能性のあるトークンごとに確率を計算します。<br>Top-P では、確率の高いトークンから順に並べ、<strong>累積確率が指定した p の値に達するまでの最小の候補群を選択対象</strong>にします。<br>ただし、候補群に含まれたトークンから一様に<strong>ランダム選択するわけではありません</strong>。<br>通常は、候補群に絞ったうえで、温度などで調整された確率分布に従って次のトークンがサンプリングされます。</p>
+<p class="callout note">候補の<strong>個数</strong>で絞るのが Top-K、候補の<strong>累積確率</strong>で絞るのが Top-P という違いを押さえておくとよいです。</p>
+</article>
+<article class="term" id="t53" data-term="t53">
+<h3 class="term-title"><a class="anchor" href="#t53">グラウンディング（Grounding）</a></h3>
+<p><strong>グラウンディング＝モデルの出力を、信頼できる情報源に結びつけること</strong><br>グラウンディングとは、生成 AI の回答を、検証可能な<strong>根拠となるデータ</strong>（社内文書、Google 検索、企業データベースなど）に基づかせることです。<br>RAG はグラウンディングを実現するための代表的な手法の一つ、という関係になります。<br>グラウンディングを行うことで、事実に基づかない回答（ハルシネーション）を減らし、出典を示して信頼性を高められます。</p>
+<h4 class="sub-title">情報源の3種類</h4>
+<ul><li><strong>ファーストパーティ データ（First-party data）</strong>：自社が所有・収集したデータ（例：社内マニュアル、契約書、自社の顧客データ）</li><li><strong>サードパーティ データ（Third-party data）</strong>：外部の信頼できるデータ提供者から得られる情報（例：業界レポート、専門データベース、API 提供サービス）</li><li><strong>ワールド データ（World data）</strong>：インターネット全体から得られる公開情報（例：Google 検索）</li></ul>
+<h4 class="sub-title">サードパーティ データを使う主なメリット</h4>
+<ul><li><strong>情報の幅を広げる</strong>：自社が持たない知識領域を補完できる</li><li><strong>専門性の確保</strong>：業界特化や専門領域の高精度情報を活用できる</li><li><strong>出力の信頼性向上</strong>：一次情報や検証済みデータを反映し、ハルシネーションを減らせる</li></ul>
+<p class="callout note">データの入手経路による区分（ゼロパーティ／ファースト／セカンド／サードパーティ）は、第2章の<strong>データの区分</strong>で整理しています。</p>
+<h4 class="sub-title">Google 検索によるグラウンディング（Grounding with Google Search）</h4>
+<p>Google 検索によるグラウンディングは、<strong>Gemini モデルがリアルタイムのウェブコンテンツにアクセスして、有用な情報を取得・出力に反映する仕組み</strong>です。<br>この機能により：</p>
+<ul><li>モデルの<strong>知識のカットオフを超えた最新情報</strong>に対応可能になる</li><li>出力の事実の正確性が向上し、<strong>ハルシネーションを抑制</strong>できる</li><li>モデルが使った情報源（検索結果）を<strong>引用付きで返す</strong>ことでユーザーの信頼性向上につながる</li></ul>
+<p>このプロセスはツールとして組み込まれ、Gemini は必要に応じて検索クエリを自動生成し、検索結果を処理してアウトプットに統合します。</p>
+<p class="callout note">情報源の3種類でいう<strong>ワールド データ</strong>を使うグラウンディングにあたります。社内文書を根拠にしたい場合は、Agent Search などによるファーストパーティ データのグラウンディングを使います。</p>
+</article>
+<article class="term" id="t54" data-term="t54">
+<h3 class="term-title"><a class="anchor" href="#t54">RAG（検索拡張生成 / Retrieval-Augmented Generation）</a></h3>
+<p><strong>RAG＝外部の信頼できるデータを検索し、その結果をプロンプトに含めて回答を生成する仕組み</strong><br>RAG は、モデルが持つ学習済みの知識だけに頼るのではなく、<strong>質問に関連する情報を社内文書やデータベースから検索し、それを根拠として回答を生成する手法</strong>です。<br>処理の流れは「①ユーザーの質問を受け取る → ②関連文書を検索（多くはエンベディングによるベクトル検索）→ ③検索結果をプロンプトに付与 → ④モデルが回答を生成」となります。<br>これにより、<strong>ハルシネーションの抑制</strong>、<strong>最新情報や社内固有情報への対応</strong>、<strong>回答の出典提示</strong>が可能になります。</p>
+<p class="callout note">ファインチューニングと違い、<strong>モデル自体を再学習させずに</strong>知識を追加できる点が大きな利点です。</p>
+</article>
+<article class="term" id="t55" data-term="t55">
+<h3 class="term-title"><a class="anchor" href="#t55">転移学習（Transfer Learning）</a></h3>
+<p><strong>転移学習＝すでに学習済みのモデルの知識を、別のタスクに転用する手法</strong><br>転移学習とは、すでに別のデータやタスクで学習済みのモデルを活用し、新しいタスクに合わせて追加学習や調整を行う手法です。<br>ゼロから学習させるのに比べて、<strong>必要なデータ量と学習コストを大幅に減らせる</strong>のが最大の利点です。<br>たとえば、大量の一般画像で学習済みのモデルを土台にして、自社の製品画像だけを少し追加学習させれば、少ないデータでも高い精度の判定モデルが作れます。</p>
+<p class="callout note"><strong>ファインチューニングは転移学習を実現する代表的な手段</strong>です。基盤モデルを土台に自社データで追加学習する流れは、まさに転移学習の考え方に沿っています。</p>
+<p class="callout note">「基盤モデルを事前学習してから各用途に適応させる」という生成AIの使い方そのものが、転移学習の発想に基づいています。</p>
+</article>
+<article class="term" id="t56" data-term="t56">
+<h3 class="term-title"><a class="anchor" href="#t56">ファインチューニング（Fine-tuning / チューニング）</a></h3>
+<p><strong>ファインチューニング＝学習済みの基盤モデルを、追加データで再学習させて特定用途に適応させる手法</strong><br>ファインチューニング（チューニング）とは、<strong>すでに大量のデータで事前学習された基盤モデルに対して、特定の業務、業界、企業、用途に関連するデータで追加訓練を行い、精度や適合率を高めるプロセス</strong>です。<br>基盤モデルをゼロから作り直すのではなく、自社データを使って追加学習させることで、専門用語や独自の文体、特定タスクへの対応力を高められます。</p>
+<p>このプロセスでは次のような手法が活用されます：</p>
+<ul><li><strong>フル・ファインチューニング</strong>：モデルのすべてのパラメータを更新する方法。最も高い性能向上が見込める反面、計算コストが大きく大量のデータを必要とする。</li><li><strong>パラメータ効率チューニング（PEFT / アダプター方式・LoRA など）</strong>：モデルの一部パラメータのみを調整する方法。リソース消費を抑えながら性能を向上できる。</li><li><strong>教師ありファインチューニング</strong>：ラベル付きデータを使う手法。分類・要約・変換など多くの実務タスクで利用される。</li><li><strong>蒸留（Distillation）</strong>：大きなモデル（教師）の振る舞いを、小さなモデル（生徒）に学習させて軽量化する手法。</li></ul>
+<h4 class="sub-title">RAG との使い分け（試験頻出）</h4>
+<ul><li><strong>知識・情報を足したい</strong>（最新情報、社内文書、出典が必要）→ <strong>RAG</strong></li><li><strong>振る舞い・文体・出力形式を変えたい</strong>（専門タスクへの特化）→ <strong>ファインチューニング</strong></li></ul>
+</article>
+<article class="term" id="t57" data-term="t57">
+<h3 class="term-title"><a class="anchor" href="#t57">ポストプロセッシング（後処理）</a></h3>
+<p><strong>ポストプロセッシング＝モデルが生成した出力を、そのまま使わずに後段で加工・検証・整形する処理</strong><br>ポストプロセッシング（後処理）とは、<strong>生成 AI が出した結果を受け取ったあと、アプリケーション側で手を加えて最終的な出力に仕上げる工程</strong>です。<br>プロンプトや入力データを整える<strong>前処理（プリプロセッシング）</strong>に対して、<strong>生成した後</strong>に働くのがポストプロセッシングです。</p>
+<h4 class="sub-title">なぜ必要か</h4>
+<p>生成 AI には<strong>非決定性</strong>があり、同じ指示でも毎回まったく同じ形式・内容で返るとは限りません。<br>プロンプトで「JSON で返して」と指示しても、前置きの文章が付いたり、項目が欠けたりすることがあります。<br>業務システムに組み込むには<strong>決まった形式であることを確実に保証する</strong>必要があるため、モデルの出力を信じきらず、後処理で担保します。</p>
+<p class="callout note">プロンプト設計で「なるべく正しく出させる」、ポストプロセッシングで「最後に確実にする」という<strong>二段構え</strong>で考えるのが実務的です。</p>
+<h4 class="sub-title">代表的な処理</h4>
+<ul><li><strong>形式の整形・検証</strong>：JSON の抽出とスキーマ検証、余計な前置きや Markdown 記法の除去、文字数の調整</li><li><strong>不要部分の削除</strong>：「はい、承知しました」といった前置き、同じ内容の繰り返し、余計な注釈の除去</li><li><strong>安全性のチェック</strong>：<strong>安全フィルタ</strong>による有害表現の検出、禁止語の置換、個人情報（PII）のマスキング</li><li><strong>事実確認</strong>：出典データとの突き合わせ、数値の検算、リンク先の存在確認</li><li><strong>候補の選別</strong>：複数生成させたうちから最適なものを選ぶ、スコアを付けて並べ替える（再ランキング）</li><li><strong>定型情報の付加</strong>：出典リンク、免責事項、「AI が生成した内容です」といった注記の追加</li></ul>
+<h4 class="sub-title">位置づけと限界</h4>
+<ul><li><strong>Responsible AI の実装手段</strong>でもあります。出力側の安全フィルタや、<strong>Human-in-the-loop</strong> による確認・承認は、広い意味でのポストプロセッシングにあたります。</li><li>⚠️ ポストプロセッシングは<strong>モデルそのものを改善するわけではありません。</strong> 出力を整えたり弾いたりはできますが、モデルの理解力や知識不足そのものは解消できません。根本的に精度を上げたい場合は、RAG やファインチューニングを検討します。</li><li>※ 一方で、<strong>モデルを再学習させずに済むため低コストかつ確実</strong>という利点があります。「形式が守られない」「たまに不適切な語が混じる」といった問題への対処としては第一選択になります。</li></ul>
+</article>
+</section>
+<section class="chapter" id="c5" data-chapter="c5">
+<h2 class="chapter-title">第5章 Google の生成AIモデル</h2>
+<article class="term" id="t58" data-term="t58">
+<h3 class="term-title"><a class="anchor" href="#t58">Gemini</a></h3>
+<p>Gemini は、Google が開発した<strong>高性能な生成 AI モデルファミリー</strong>です。<br>テキストだけでなく、画像、コード、音声など複数の種類のデータを扱える<strong>マルチモーダル AI</strong>である点が特徴です。<br>また、文章生成、画像の理解、コードの説明や改善など、さまざまな形式の情報を組み合わせて処理できます。</p>
+</article>
+<article class="term" id="t59" data-term="t59">
+<h3 class="term-title"><a class="anchor" href="#t59">Gemini Nano</a></h3>
+<p><strong>Gemini Nano＝スマートフォンなどのエッジデバイス上で動作する、Google のオンデバイス向け生成AIモデル</strong><br>Gemini Nano は、<strong>スマートフォンなどのエッジデバイス上で動作することを想定した、Google のオンデバイス向け生成AIモデル</strong>です。<br>Gemini ファミリーの中で最も効率的でコンパクトなモデルとして設計されています。<br>Android では <strong>AICore</strong> というシステムサービスを通じて Gemini Nano を利用でき、デバイス上のハードウェアを活用して低レイテンシな推論を行えるように設計されています。</p>
+<p class="callout note">クラウドに送らず端末内で処理するため、<strong>オフラインでも動作し、データを外部に出さずに済む</strong>点が特徴です（詳しくは第7章の<strong>エッジデバイス／エッジ AI</strong>）。</p>
+</article>
+<article class="term" id="t60" data-term="t60">
+<h3 class="term-title"><a class="anchor" href="#t60">Gemma</a></h3>
+<p><strong>Gemma＝軽量・オープン・カスタマイズ可能・ローカル実行にも向く Google の生成 AI モデル群</strong><br>Gemma は、Google が提供する軽量なオープンモデル群です。<br>Gemini と同じ研究・技術をもとに作られており、開発者がアプリケーションに組み込んだり、用途に合わせてカスタマイズしたりしやすいように設計されています。</p>
+</article>
+<article class="term" id="t61" data-term="t61">
+<h3 class="term-title"><a class="anchor" href="#t61">Imagen</a></h3>
+<p>Imagen は、Google の<strong>テキストから画像を生成するモデル</strong>です。<br>自然言語で「どのような画像を作りたいか」を入力すると、その内容に合った写実的な画像やデザイン素材を生成できます。</p>
+</article>
+<article class="term" id="t62" data-term="t62">
+<h3 class="term-title"><a class="anchor" href="#t62">Gemini Flash Image（nano banana）</a></h3>
+<p><strong>Gemini Flash Image＝自然言語で画像を編集できる、低レイテンシのマルチモーダル画像モデル</strong><br>Gemini Flash Image（nano banana）は、Google が提供するマルチモーダル画像モデルで、次の点が Imagen と根本的に異なります：</p>
+<ul><li><strong>自然言語で画像を直接編集できる</strong>（edit-by-text）</li><li>画像の<strong>領域指定編集</strong>（bounding box 指定編集）</li><li>複数画像の融合や<strong>スタイル一貫性の保持</strong></li><li>生成 → 修正 → バリエーション作成の反復が高速（Flash 系の低レイテンシ）</li></ul>
+<p>つまり、広告制作のように「大量生成 → 細かい修正 → 最終調整」を短時間で回す用途に最適です。</p>
+<p class="callout note"><strong>Imagen は「テキストから新規に画像を生成する」のが主眼</strong>、<strong>Gemini Flash Image は「対話しながら画像を編集・調整していく」のが強み</strong>、という使い分けで押さえます。</p>
+</article>
+<article class="term" id="t63" data-term="t63">
+<h3 class="term-title"><a class="anchor" href="#t63">Chirp</a></h3>
+<p><strong>Chirp＝Google の音声理解に特化したモデル。音声のテキスト化に最適</strong><br>Chirp は、<strong>Google の音声理解に特化したモデルで、音声をテキストに変換（Speech-to-Text）する用途</strong>に最適です。<br>大量の音声データを高精度で文字起こしし、その後の分析や要約に活用できます。</p>
+<p class="callout note"><strong>Speech-to-Text API の裏側で動くモデル</strong>にあたります。API が「窓口」、Chirp が「エンジン」という関係で整理すると分かりやすいです。</p>
+<p class="callout note">多言語に対応しており、コンタクトセンターの通話分析や会議の議事録作成といった用途で使われます。</p>
+</article>
+<article class="term" id="t64" data-term="t64">
+<h3 class="term-title"><a class="anchor" href="#t64">Veo</a></h3>
+<p><strong>Veo＝テキストや画像から動画を生成するマルチモーダルな動画生成モデル</strong><br>Veo は、<strong>Google の動画生成向け生成 AI モデル</strong>です。<br>テキストで「どのような動画を作りたいか」を指示したり、画像を入力として与えたりすることで、その内容に沿った動画を生成できます。</p>
+</article>
+</section>
+<section class="chapter" id="c6" data-chapter="c6">
+<h2 class="chapter-title">第6章 AIエージェント</h2>
+<article class="term" id="t65" data-term="t65">
+<h3 class="term-title"><a class="anchor" href="#t65">AIエージェント</a></h3>
+<p><strong>AI エージェント＝目標達成のために、観察・判断・ツール利用・行動を繰り返す自律的な AI システム</strong><br>生成 AI における AI エージェントとは、ユーザーから与えられた目標を達成するために、状況を把握し、必要な行動を判断し、ツールを使いながら処理を進める AI システムです。<br>公式ガイドでは「<strong>自由に使えるツールを使用して周囲の世界に対する観察と行動をすることで、目標の達成を試みるアプリケーション</strong>」と説明されています。</p>
+<p class="callout warn">通常の生成AI（チャット）との違いは、<strong>「1回聞いて1回答えて終わり」ではない</strong>ことです。エージェントは目標を受け取ったあと、自分で手順を考え、ツールを使い、結果を見て次の一手を決める、という流れを<strong>自律的に繰り返します</strong>。</p>
+<h4 class="sub-title">エージェントの3つの構成要素</h4>
+<ul><li><strong>モデル</strong>：AI システムの頭脳。データからパターンを学習し、予測や新しいコンテンツの生成を行う。</li><li><strong>ツール</strong>：データの読み込みや処理、外部 API の呼び出しなど、<strong>環境とのやり取り</strong>をエージェントが行えるようにする機能。</li><li><strong>推論ループ（Reasoning Loop）</strong>：観察・解釈・推論・行動を繰り返すプロセス。多くの場合プロンプトエンジニアリングが使われる。</li></ul>
+<h4 class="sub-title">エージェントの種類</h4>
+<ul><li><strong>決定的（従来型）エージェント</strong>：パスとアクションが<strong>事前に定義されている</strong>エージェント。決められた分岐どおりに動く。</li><li><strong>生成型エージェント</strong>：<strong>LLM を使用して自然言語で定義されている</strong>エージェント。チャットボットの会話にリアルな雰囲気が加わる。</li><li><strong>ハイブリッド エージェント</strong>：決定的機能と生成機能の<strong>両方を兼ね備えている</strong>エージェント。この組み合わせが非常に強力とされる。</li></ul>
+<h4 class="sub-title">用途の例</h4>
+<p>カスタマーサービス、従業員の生産性向上、クリエイティブ制作、コード生成、データ分析、セキュリティなど、幅広い業務領域でエージェントが活用されます。</p>
+<p class="callout note">「Agent」という語は文脈によって意味が変わります。次項の<strong>「Agent（エージェント）」という語の使い分け</strong>もあわせて確認してください。</p>
+</article>
+<article class="term" id="t66" data-term="t66">
+<h3 class="term-title"><a class="anchor" href="#t66">「Agent（エージェント）」という語の使い分け</a></h3>
+<p><strong>同じ「エージェント」でも、文脈によって指すものが4種類ある</strong><br>試験でも実務でも紛らわしいポイントなので、整理して覚えておくとよいです。</p>
+<ul><li><strong>AI エージェント</strong>：目標達成のために自律的に観察・判断・ツール利用・行動を繰り返す AI システム。もっとも中心的な意味。</li><li><strong>プロダクト名の接頭辞「Agent 〜」</strong>：Agent Platform、Agent Studio、Agent Garden、Agent Search、Agent Engine、Agent Development Kit（ADK）など。<strong>旧 Vertex AI がエージェント中心のプラットフォームへ再編された</strong>ことを表す命名。</li><li><strong>強化学習のエージェント</strong>：環境の中で行動し、報酬をもとに学習する主体。AI エージェントとは別概念で、こちらは学習アルゴリズム上の用語。</li><li><strong>コンタクトセンターの agent（＝人間のオペレーター）</strong>：<strong>Agent Assist</strong> の「Agent」はこれ。AI ではなく<strong>人間の担当者を支援する</strong>機能である点に注意。</li></ul>
+<p class="callout warn"><strong>Agent Assist だけは意味が違います。</strong> 「AI エージェントを補助する機能」ではなく「<strong>人間のオペレーターを AI が補助する</strong>機能」です。ここは引っかけとして出やすいポイントです。</p>
+<p class="callout note">一方、<strong>Conversational Agents</strong> の「Agents」は AI ボット側を指します。同じ Customer Engagement Suite の中でも意味が逆転しているため、セットで覚えておくと安全です。</p>
+</article>
+<article class="term" id="t67" data-term="t67">
+<h3 class="term-title"><a class="anchor" href="#t67">推論ループ（Reasoning Loop）</a></h3>
+<p><strong>推論ループ＝エージェントが「観察 → 推論 → 行動」を目標達成まで繰り返す中核サイクル</strong><br>推論ループは、<strong>生成AIエージェントの中核的な制御サイクル</strong>です。</p>
+<ul><li><strong>反復プロセス</strong>：1回で終わる処理ではなく、エージェントが「観察 → 内部推論 → 意思決定（次の行動・ツール選択）→ 実行 → 観察…」を目標達成または停止点まで繰り返します。</li><li><strong>内部推論</strong>：エージェントは基盤となる言語モデル（LLM）を用いて、次に必要なステップや方針を思考します。</li><li><strong>意思決定とツール選択</strong>：内部推論の結果に基づき、どのツールをどの順序で使うか、どの入力を与えるかを決めます。</li><li><strong>状況依存の複雑度</strong>：対象タスクの難易度や必要な外部ツールの数によって、ループの設計・分岐・ガードレールの複雑さは変わります。</li><li><strong>推論フレームワークの活用</strong>：プロンプトエンジニアリングのフレームワーク（例：思考と行動を交互に行う <strong>ReAct</strong> など）で、計画立案や検証の手順を明確化し、ループの品質を高めます。</li></ul>
+<p class="callout note">公式ガイドではエージェントの構成要素を <strong>モデル ＋ ツール ＋ 推論ループ</strong> として図示しています。「1回答えて終わり」の生成AIと、エージェントを分ける決定的な違いがこのループです。</p>
+<p class="callout note">ループが止まらない・同じ行動を繰り返すといった事態を防ぐため、<strong>最大反復回数などのガードレール</strong>を設けるのが一般的です。</p>
+</article>
+<article class="term" id="t68" data-term="t68">
+<h3 class="term-title"><a class="anchor" href="#t68">関数呼び出し（Function Calling / ツールの使用）</a></h3>
+<p><strong>関数呼び出し＝LLM が外部ツール・API・関数を利用できるようにするための仕組み</strong><br>関数呼び出し（ツールの使用）とは、LLM（大規模言語モデル）が<strong>外部ツール・API・関数を利用できるようにするための仕組み</strong>です。<br>モデルに利用可能な関数の名前・用途・引数の形式をあらかじめ伝えておくと、モデルは必要だと判断したタイミングで「どの関数を、どの引数で呼ぶべきか」を構造化された形式（JSON など）で出力します。</p>
+<p>処理の流れは次のようになります：</p>
+<ul><li>①ユーザーの依頼をモデルが受け取る</li><li>②モデルが「この関数をこの引数で呼ぶべき」と判断し、呼び出し内容を出力する</li><li>③<strong>アプリケーション側が実際に関数や API を実行する</strong></li><li>④実行結果をモデルに返す</li><li>⑤モデルが結果を踏まえて最終的な回答を生成する</li></ul>
+<p class="callout warn"><strong>モデル自身が関数やコードを実行するわけではありません。</strong> モデルが出すのは「呼び出しの要求」までで、実行はアプリケーション側の責任です。試験ではここが問われやすいポイントです。</p>
+<p class="callout note">これにより、天気の取得、在庫照会、DB 検索、メール送信など、モデル単体では不可能な「外部世界への働きかけ」が可能になります。ツール接続を標準化する仕組みが <strong>MCP</strong> です。</p>
+</article>
+<article class="term" id="t69" data-term="t69">
+<h3 class="term-title"><a class="anchor" href="#t69">ReAct プロンプト</a></h3>
+<p>ReAct（Reason + Act）プロンプト技法は、LLM に <strong>「頭脳（思考）」と「両手（行動）」を与えるアプローチ</strong>です。</p>
+<ul><li>思考：問題を解くために必要なステップを推論します。</li><li>行動：外部ツールやデータベース検索などを実際に実行します。</li><li>観察：行動の結果（検索結果やAPI応答など）を取り込みます。</li><li>応答：思考と観察の結果を統合し、ユーザーに解答を提示します。</li></ul>
+<p class="callout note">思考 → 行動 → 観察 を必要な回数くり返すのが特徴で、AI エージェントの基本的な動作ループとして押さえておくとよいです。</p>
+</article>
+<article class="term" id="t70" data-term="t70">
+<h3 class="term-title"><a class="anchor" href="#t70">Agent Development Kit（ADK）</a></h3>
+<p>Agent Development Kit（ADK）は、<strong>コードを使って AI エージェントを構築・評価・デバッグ・デプロイするための開発フレームワーク</strong>です。<br>Agent Studio が GUI やローコード寄りの開発環境であるのに対し、ADK は開発者がコードでエージェントの処理やツール連携を細かく設計する場合に使います。</p>
+<p>ADK は、単体のエージェントだけでなく、<strong>複数のエージェントを連携させるマルチエージェントシステムの構築</strong> にも利用できます。<br>試験では、ADK を <strong>「ノーコード開発スタジオ」ではなく、コードベースのオープンソース開発フレームワーク</strong> として押さえることが重要です。</p>
+<h4 class="sub-title">具体例</h4>
+<p>たとえば、社内問い合わせ対応エージェントを作る場合、ADK を使うと、社内ドキュメント検索、外部 API 呼び出し、回答生成などの処理をコードで定義できます。<br>さらに、動作確認やデバッグを行ったうえで、Agent Engine（Agent Platform のマネージドランタイム）、Cloud Run、Google Kubernetes Engine などへデプロイできます。</p>
+</article>
+<article class="term" id="t71" data-term="t71">
+<h3 class="term-title"><a class="anchor" href="#t71">A2A（Agent2Agent）プロトコル</a></h3>
+<p><strong>A2A＝異なるフレームワークやベンダーで作られた AI エージェント同士が、相互に通信・連携するための Google 提唱のオープンプロトコル</strong><br>エージェントが互いの能力を公開し、タスクを依頼・委譲し合えるようにすることで、マルチエージェントシステムを組みやすくします。</p>
+</article>
+<article class="term" id="t72" data-term="t72">
+<h3 class="term-title"><a class="anchor" href="#t72">MCP（Model Context Protocol）</a></h3>
+<p><strong>MCP＝AI モデル／エージェントを、外部のツールやデータソースに接続するための標準プロトコル</strong><br>ツールごとに個別の連携実装を書くのではなく、共通の規格で接続できるようにする仕組みです。<br>A2A が「エージェント同士をつなぐ」のに対し、MCP は「エージェントとツール・データをつなぐ」ものと整理すると分かりやすいです。</p>
+</article>
+</section>
+<section class="chapter" id="c7" data-chapter="c7">
+<h2 class="chapter-title">第7章 Agent Platform（Google Cloud のAI基盤）</h2>
+<article class="term" id="t73" data-term="t73">
+<h3 class="term-title"><a class="anchor" href="#t73">Agent Platform</a></h3>
+<p>Agent Platform（正式名称：Gemini Enterprise Agent Platform）は、Google Cloud が提供する <strong>生成AIおよびAIエージェントの開発・実行・管理を統合的に行うプラットフォーム</strong>です。<br>これは <strong>Vertex AI が改名・再編されたもの</strong>であり、Vertex AI と Agent Platform が別プロダクトとして並立しているわけではありません。<br>Model Garden、Model Registry、Pipelines、AutoML、Endpoints など、従来 Vertex AI が持っていた機能はすべて Agent Platform の配下に入っています。<br>従来の Vertex AI が主に「モデルの開発・運用基盤」だったのに対し、Agent Platform では<br><strong>Gemini などの基盤モデルを活用したAIエージェントの構築・オーケストレーション</strong>が中心的な役割として強化されています。<br><strong>Agent Platform を利用すると、モデルの学習・評価・デプロイなどの一連の処理を、再現性のある形で自動化できる</strong></p>
+<p class="callout warn">試験ガイドの版によっては旧名称（Vertex AI、Vertex AI Studio、Vertex AI Search など）で出題される可能性があるため、旧名称も併せて押さえておくこと。</p>
+<h4 class="sub-title">Pipelines</h4>
+<p><strong>Pipelines＝学習・評価・デプロイなどの ML ワークフローを、再現性のある形で自動化する仕組み</strong></p>
+<h4 class="sub-title">具体例</h4>
+<p>例えば企業が：</p>
+<ul><li>顧客問い合わせに対応するAIエージェント</li><li>社内データを検索して回答するRAGシステム</li><li>複数APIを連携して業務を自動化するAI</li></ul>
+<p>を作る場合、Agent Platform を利用すると：</p>
+<ul><li>Gemini などのモデルを利用</li><li>外部ツール（API / DB）と連携</li><li>複数ステップの処理をエージェントとして定義</li><li>本番環境にデプロイして継続運用</li></ul>
+<p>といった流れを<strong>一貫して実行・管理</strong>できます。</p>
+</article>
+<article class="term" id="t74" data-term="t74">
+<h3 class="term-title"><a class="anchor" href="#t74">Agent Studio</a></h3>
+<p>Agent Studio（旧称：Vertex AI Studio）は、<strong>Agent Platform 上でプロンプトを設計・テスト・管理し、さらに AIエージェントを構築・調整できるGUIベースの開発環境</strong>です。<br>本来の中核機能は Gemini などのモデルに対する<strong>プロンプトの設計・テスト・管理</strong>であり、そこに低コードでのエージェント構築機能が統合されています。<br>Agent Studio では以下が実行できます。</p>
+<ul><li>プロンプト設計・チューニング</li><li>RAG（検索拡張生成）の統合と検証</li><li>グラウンディング（外部データ連携）のテスト</li><li>ツール連携（API・DBなど）の挙動確認</li><li>マルチステップ処理を行うエージェントの設計</li></ul>
+<p>これにより、単なるモデルのお試しではなく、<strong>実際に動作するAIエージェントの振る舞い全体を検証できる環境</strong>となっています。</p>
+</article>
+<article class="term" id="t75" data-term="t75">
+<h3 class="term-title"><a class="anchor" href="#t75">Google AI Studio</a></h3>
+<p><strong>Gemini API を使って生成AIのプロンプト設計やテストをすばやく行うための、無料枠のある手軽な開発者向けツール</strong><br>Google AI Studio は、Gemini API を使ってプロンプトの試作や評価、モデルの応答確認をすぐに行えるブラウザベースのツールです。<br>Agent Studio よりも軽量かつシンプルな設計になっており、アイデアの迅速なテストやPoCに適しています。</p>
+<p class="callout note">無料枠がありますが、API の利用量に応じた有料プランも存在します。</p>
+<h4 class="sub-title">Agent Studio との違い（試験頻出）</h4>
+<ul><li><strong>Google AI Studio</strong>：Gemini Developer API 側のツール。個人・試作・PoC 向け。</li><li><strong>Agent Studio</strong>：Agent Platform（Google Cloud）側のツール。企業利用向けで、セキュリティ・ガバナンス・本番運用を前提とする。</li></ul>
+</article>
+<article class="term" id="t76" data-term="t76">
+<h3 class="term-title"><a class="anchor" href="#t76">Model Garden</a></h3>
+<p>Agent Platform の Model Garden は、Google やパートナー、オープンソースの<strong>既に学習済みのモデルを一か所に集めて、ユーザーが探せたり、用途に応じてカスタマイズ（ファインチューニングなど）したり、簡単にデプロイしたりできる機能</strong>を持っています。<br>Gemini などの Google 製モデルに加え、パートナー製モデルやオープンモデルなど多数（数百規模）が用意されており、画像・言語・マルチモーダルなどさまざまなモダリティに対応しているモデルを選べます。</p>
+<p class="callout note">掲載モデル数は頻繁に変わるため、具体的な数値の暗記は不要です。</p>
+<p>また、ユーザーのデータを使ってこれらをカスタマイズでき、デプロイしてアプリケーションに組み込むことが可能です。</p>
+</article>
+<article class="term" id="t77" data-term="t77">
+<h3 class="term-title"><a class="anchor" href="#t77">Model Registry</a></h3>
+<p>Model Registry は、<strong>AI モデルを一元的に管理するための中央リポジトリ</strong>です。<br>モデルのバージョン、作成日時、評価結果、利用状況などのメタデータを整理して管理できます。<br>これにより、どのモデルが最新か、どのモデルが本番環境で使われているかをチームで把握しやすくなります。</p>
+</article>
+<article class="term" id="t78" data-term="t78">
+<h3 class="term-title"><a class="anchor" href="#t78">Feature Store（旧称：Vertex AI Feature Store）</a></h3>
+<p>Agent Platform の Feature Store は、<strong>特徴量の管理に特化したデータ基盤</strong>です。<br>機械学習では、特徴量（Feature）とはモデルが学習や予測に使用する入力変数のことで、例えば顧客年齢、購入履歴、センサーデータなどが含まれます。</p>
+<p>Feature Store を使うと、</p>
+<ul><li><strong>一元管理</strong>：特徴量を集中管理し、重複や不整合を防げる</li><li><strong>再利用性</strong>：学習用と推論用で同じ特徴量定義を共有できる</li><li><strong>リアルタイム提供</strong>：オンライン推論のために即時特徴量取得が可能</li><li><strong>バッチ提供</strong>：バッチ処理で大量データをまとめて供給できる</li></ul>
+<p>これにより、データの一貫性が保たれ、<strong>モデル精度の向上と開発効率の改善</strong>につながります。</p>
+<p class="callout note">主に表形式データを扱う従来型の機械学習で使う機能で、生成 AI 固有のものではありません。学習時と推論時で特徴量の作り方がずれる問題（トレーニング／サービング スキュー）を防ぐ役割があります。</p>
+</article>
+<article class="term" id="t79" data-term="t79">
+<h3 class="term-title"><a class="anchor" href="#t79">AutoML(自動機械学習)</a></h3>
+<p><strong>AutoML＝ML ワークフローを自動化する仕組み（学習「手法」ではない）</strong></p>
+<p class="callout note">教師あり学習・教師なし学習・強化学習のような「学習手法」ではなく、<strong>特徴量エンジニアリング、モデル選択、ハイパーパラメータ調整といった ML ワークフローを自動化するサービス</strong>である点に注意。</p>
+<p>Agent Platform の AutoML は、ユーザーが提供するデータを基に、<strong>コード不要でモデルを構築・トレーニングできる仕組み</strong>です。<br>高度なMLやプログラミングの専門知識がなくても、データを準備するだけで、Google のパイプラインが特徴抽出やハイパーパラメータ調整などを自動化してくれます。<br>さらに、AutoML はデータのタイプごとに対応するモデルを提供しています：</p>
+<ul><li>画像データ：分類（例: 犬 vs 猫の画像）、オブジェクト検出（例: 写真内の特定の対象を認識）</li><li>動画データ：動作認識（例: サッカーのゴールシーンを検出）、分類、オブジェクトトラッキング（例: 動く車を追跡）</li><li>テキストデータ：分類（例: スパム判定）、エンティティ抽出（例: 顧客名や日付を抽出）、感情分析（例: レビューがポジティブかネガティブかを判定）</li><li>表形式データ：分類 / 回帰（例: 顧客離脱予測）、予測（例: 売上予測）</li></ul>
+</article>
+<article class="term" id="t80" data-term="t80">
+<h3 class="term-title"><a class="anchor" href="#t80">Agent Platform Workbench</a></h3>
+<p><strong>Workbench＝Google Cloud 上のマネージドな JupyterLab 開発環境</strong><br>Agent Platform Workbench は、<strong>Google Cloud 上で使える JupyterLab ベースの開発環境</strong>です。<br>Agent Platform Workbench インスタンスは「データサイエンス ワークフロー全体」のための Jupyter notebook ベースの開発環境であり、Jupyter ノートブック内から Agent Platform や他の Google Cloud サービスを操作ができます。</p>
+<p class="callout note">データの探索から前処理、学習、評価までを1つのノートブック上で進められるため、<strong>データサイエンティストの作業拠点</strong>として使われます。</p>
+<p class="callout note">旧称は Vertex AI Workbench です。</p>
+</article>
+<article class="term" id="t81" data-term="t81">
+<h3 class="term-title"><a class="anchor" href="#t81">Colab Enterprise</a></h3>
+<p><strong>Colab Enterprise＝Google Cloud のセキュリティ・コンプライアンス機能を備えた、共同作業向けのマネージド ノートブック環境</strong><br>Colab Enterprise は、<strong>Google Cloud のセキュリティ機能とコンプライアンス機能を備えた、コラボレーション指向のマネージド ノートブック環境</strong>です。<br>Google Cloud コンソールから Colab Enterprise ノートブックを作成し、デフォルトのランタイムでコードを実行するクイックスタートが提供されています。</p>
+<p>Colab Enterprise のポイントは、<strong>単なる個人向けノートブックではなく、Google Cloud 上で管理されたエンタープライズ向けノートブック環境</strong>であることです。<br>インフラを自分で細かく管理しなくても、必要に応じてランタイムがプロビジョニングされ、不要になればシャットダウンされます。<br>また、ランタイム テンプレートを使ってマシンタイプ、アクセラレータ、ディスク容量などを構成できます。</p>
+<p>さらに、Colab Enterprise は Agent Platform や BigQuery との統合が重視されています。<br>Google Cloud コンソール内で Agent Platform や BigQuery を使いながら、ノートブックで作業を続けられるため、データ探索、分析、モデル開発のワークフローに適しています。<br>ノートブックのコードは、デフォルトでユーザー認証情報を使って Google Cloud サービスにアクセスできるため、Google Cloud リソースを扱うコードを実行しやすい点も特徴です。</p>
+<p class="callout note"><strong>Workbench との違い</strong>：Workbench はインスタンスを自分で立てて長く使う開発環境、Colab Enterprise は<strong>共同作業とマネージド運用</strong>に寄せた環境、という位置づけです。</p>
+</article>
+<article class="term" id="t82" data-term="t82">
+<h3 class="term-title"><a class="anchor" href="#t82">Gen AI Evaluation Service</a></h3>
+<p><strong>Gen AI Evaluation Service＝生成AIモデルの出力を、客観的・データドリブンに評価するサービス</strong><br>Gen AI Evaluation Service は、<strong>生成 AI モデルを客観的かつデータドリブンに評価するためのサービス</strong>です。<br>モデル移行、プロンプト改善、ファインチューニングなどの開発タスクを支援するために利用できます。</p>
+<p class="callout note">生成AIの出力は「正解が1つ」ではないため、人の感覚だけで良し悪しを判断すると比較になりません。<strong>同じ基準で数値化して比べられる</strong>ようにするのがこのサービスの役割です。</p>
+<p class="callout note">「モデルを A から B に乗り換えて品質は落ちないか」「プロンプトを変えて本当に良くなったか」を確かめる場面で使います。</p>
+</article>
+<article class="term" id="t83" data-term="t83">
+<h3 class="term-title"><a class="anchor" href="#t83">Agent Garden</a></h3>
+<p>Agent Garden は、<strong>事前構築済みのエージェントサンプルを提供するライブラリ</strong>です。<br>RAG などの一般的な AI パターンをテンプレートとして利用できるため、エージェントをゼロから作るのではなく、既存のサンプルを出発点にして素早く開発を始められます。</p>
+</article>
+<article class="term" id="t84" data-term="t84">
+<h3 class="term-title"><a class="anchor" href="#t84">Agent Search（旧称：Vertex AI Search）</a></h3>
+<p><strong>Agent Search＝自然言語検索、セマンティック検索、生成 AI による回答・要約を実現するサービス</strong><br>Agent Search は、<strong>企業や組織が持つデータを対象に、検索やレコメンデーション、生成 AI による回答を組み込んだアプリケーションを構築するためのサービス</strong>です。<br>自然言語理解やセマンティック検索に対応しており、ユーザーはキーワードだけでなく、普段の言葉に近い質問文で情報を探せます。<br>Google Cloud における<strong>事前構築済み RAG（すぐに使える RAG）</strong>の代表例として押さえておくとよいです。</p>
+</article>
+<article class="term" id="t85" data-term="t85">
+<h3 class="term-title"><a class="anchor" href="#t85">MLOps</a></h3>
+<p><strong>MLOps＝機械学習モデルの開発から運用までを、継続的かつ効率的に回すための考え方と仕組み</strong><br>DevOps の考え方を機械学習に適用したもので、データ準備、学習、評価、デプロイ、監視、再学習といった ML ライフサイクル全体を自動化・標準化します。<br>Agent Platform では、Pipelines、Model Registry、モデルモニタリングなどがこれを支えます。</p>
+<p class="callout note">特に、時間の経過とともに実データの傾向が変わってモデルの精度が落ちる <strong>モデルドリフト／データドリフト</strong> への対応（監視と再学習）が重要です。</p>
+</article>
+<article class="term" id="t86" data-term="t86">
+<h3 class="term-title"><a class="anchor" href="#t86">ドリフトモニタリング（Drift Monitoring）</a></h3>
+<p><strong>ドリフトモニタリング＝変化の兆候を検知し、追加の評価や対応を検討するための手段</strong><br>ドリフトモニタリングは、<strong>モデルの学習時または基準時のデータと、実運用中のデータを比較し、入力特徴量や推論結果の分布に変化が生じていないかを検知する仕組み</strong>です。<br>モデルは、学習時のデータ分布を前提に予測を行います。<br>そのため、運用環境で入力されるデータの傾向が変わると、モデルが想定していた条件と実際の利用状況にずれが生じる可能性があります。</p>
+<p class="callout warn">ドリフトモニタリングは、<strong>予測精度の低下を直接確認するものではありません。</strong> 精度低下を確認するには、正解ラベルを用いた評価や、別途モデル性能の検証が必要です。</p>
+<h4 class="sub-title">データドリフト</h4>
+<p><strong>データドリフト＝学習時と運用時で、入力データの傾向（分布）が変化する現象</strong><br>データドリフトとは、<strong>モデルを学習したときのデータの傾向（分布）と、実際の運用で入力されるデータの傾向が変化する現象</strong>を指します。<br>モデルはトレーニング時のデータパターンをもとに予測を行うため、データの傾向が変わると予測精度が低下することがあります。<br>たとえば、コロナ前の購買データで作った需要予測モデルが、生活様式の変化後には当たらなくなる、といったケースです。</p>
+<h4 class="sub-title">スキュー（トレーニング／サービング スキュー）</h4>
+<p><strong>スキュー＝トレーニング時と本番時のあいだに、最初から食い違いがある状態</strong><br>トレーニングデータと本番データの間で、特徴量の分布やデータ処理方法に差異が生じることを指します。<br>学習時と推論時で前処理の実装が違う、参照しているデータソースが違う、といった原因で起こります。</p>
+<p class="callout note">ドリフトは「運用しているうちに<strong>時間とともに</strong>ずれていく」、スキューは「そもそも学習時と本番で<strong>最初から</strong>食い違っている」という違いで整理すると覚えやすいです。</p>
+</article>
+<article class="term" id="t87" data-term="t87">
+<h3 class="term-title"><a class="anchor" href="#t87">Agent Platform Model Monitoring</a></h3>
+<p><strong>Model Monitoring＝本番運用中のモデルの入力・予測を継続監視し、ドリフトやスキューを検出する機能</strong><br>Agent Platform Model Monitoring は、<strong>本番環境で運用されているモデルの入力データや予測結果の分布を継続的に監視し、トレーニング時のデータと比較することで、データドリフトやスキューを検出する機能</strong>を提供します。<br>これらの変化を早期に検出することで、モデルの再評価や再トレーニングのタイミングを適切に判断し、モデルの性能維持に貢献します。</p>
+<p class="callout note"><strong>ドリフトモニタリング</strong>という考え方を、Agent Platform 上で実現する具体的な機能がこれにあたります。検出対象である<strong>データドリフト</strong>と<strong>スキュー</strong>の詳細は、前項のドリフトモニタリングを参照してください。</p>
+<p class="callout note">MLOps における「④モデルの管理」を支える中心的な機能です。</p>
+</article>
+<article class="term" id="t88" data-term="t88">
+<h3 class="term-title"><a class="anchor" href="#t88">TPU（Tensor Processing Unit）</a></h3>
+<p><strong>TPU＝AI モデルのトレーニングと推論を高速化する Google 独自設計の専用ハードウェア</strong><br>TPU（Tensor Processing Unit）は、<strong>Google が AI や機械学習の計算を高速化するために設計した専用チップ</strong>です。<br>特に、ディープラーニングや生成 AI で多く使われる行列演算を効率よく処理できるように作られています。</p>
+</article>
+<article class="term" id="t89" data-term="t89">
+<h3 class="term-title"><a class="anchor" href="#t89">エッジデバイス／エッジ AI</a></h3>
+<p><strong>エッジデバイス＝データが発生する現場側の端末。そこで AI を動かすのがエッジ AI</strong><br>エッジデバイスとは、<strong>データが実際に生まれる場所にある端末や機器</strong>のことです。<br>スマートフォン、監視カメラ、各種センサー、産業機械、車載機器、店舗のレジ端末などが該当します。<br><strong>エッジ AI</strong> は、こうした「<strong>行動が起こる場所に近いインフラストラクチャ（デバイスやサーバー）</strong>」で AI を実行する考え方です。<br>クラウドにデータを送って処理するのではなく、端末側で推論を行う点が特徴です。</p>
+<h4 class="sub-title">エッジで動かすメリット</h4>
+<ul><li><strong>低レイテンシ</strong>：通信の往復がないため応答が速い。自動運転や製造ラインの異常検知など、即時性が必要な用途に向く</li><li><strong>オフラインでも動作</strong>：ネットワークが不安定・圏外の環境でも止まらない</li><li><strong>通信コストの削減</strong>：映像や高頻度センサーデータをすべてクラウドへ送らずに済む</li><li><strong>プライバシーの保護</strong>：データを端末の外に出さずに処理できるため、個人情報や機密情報を守りやすい</li></ul>
+<h4 class="sub-title">制約と対応</h4>
+<p>エッジデバイスは、クラウドと比べて<strong>計算能力・メモリ・電力・ストレージが限られます</strong>。<br>そのため、大規模なモデルをそのまま載せることはできず、<strong>軽量なモデルや軽量化した（蒸留・量子化した）モデル</strong>を使います。</p>
+<ul><li><strong>Gemini Nano</strong>：Google の最も効率的でコンパクトな AI モデル。<strong>デバイス上での実行を想定</strong>して設計されている</li><li><strong>Gemma</strong>：軽量なオープンモデル群で、ローカル実行やカスタマイズに向く</li><li><strong>LiteRT（Lite Runtime／旧 TensorFlow Lite）</strong>：開発者が AI モデルを<strong>エッジデバイスにデプロイする</strong>ために Google が提供するランタイム</li></ul>
+<p class="callout note">用途に応じて「クラウドで大きなモデル」と「エッジで軽量モデル」を組み合わせる<strong>ハイブリッド構成</strong>もよく採られます。</p>
+<p class="callout note">試験では、<strong>低レイテンシ・オフライン動作・データを外部に出さない</strong>という要件が出てきたらエッジ AI を選ぶ、と押さえておくとよいです。</p>
+</article>
+<article class="term" id="t90" data-term="t90">
+<h3 class="term-title"><a class="anchor" href="#t90">LiteRT（Lite Runtime）</a></h3>
+<p><strong>LiteRT＝AIモデルをエッジデバイスで動かすための高性能ランタイム（旧 TensorFlow Lite）</strong><br>LiteRT（Lite Runtime）は、Google が提供する<strong>エッジデバイス AI 向けの高性能ランタイム</strong>で、以前は TensorFlow Lite と呼ばれていました。<br>このランタイムは、以下の特徴を持っています。</p>
+<ul><li><strong>マルチフレームワーク対応</strong>：TensorFlow、PyTorch、JAX などのモデルを TFLite 形式に変換して実行可能。</li><li><strong>マルチプラットフォームサポート</strong>：Android、iOS、組み込み Linux、マイクロコントローラなど、さまざまなデバイスで利用可能。</li><li><strong>ハードウェアアクセラレーション</strong>：GPU や NPU などの専用ハードウェアを活用して、推論の高速化を実現。</li><li><strong>最適化ツールの提供</strong>：量子化やメタデータ処理など、モデルの最適化を支援するツールが利用可能。</li></ul>
+<p class="callout note">公式ガイドでは「開発者が AI モデルをエッジデバイスにデプロイできるようにするツール」として挙げられています。</p>
+</article>
+<article class="term" id="t91" data-term="t91">
+<h3 class="term-title"><a class="anchor" href="#t91">Cloud Storage</a></h3>
+<p><strong>Cloud Storage＝生成 AI に使う大容量データや参照ファイルを保存・管理するストレージ</strong><br>Cloud Storage は、Google Cloud 上で大容量のファイルを保存・管理するためのストレージサービスです。<br>生成 AI の文脈では、学習用データ、評価用データ、参照資料、画像、音声、動画、PDF、ログなどを保存する場所として利用されます。</p>
+</article>
+<article class="term" id="t92" data-term="t92">
+<h3 class="term-title"><a class="anchor" href="#t92">Cloud Run functions（旧称：Cloud Functions）</a></h3>
+<p>Cloud Run functions（旧称：Cloud Functions）は、<strong>サーバーレスかつイベント駆動で小規模なコードを実行する仕組み</strong>です。<br>AIエージェントは、この関数をツールとして呼び出すことで、モデル単体では対応しにくい処理を外部機能として追加できます。<br>そのため、画像分析、文書要約、外部API連携などをエージェントに組み込む用途に適しています。</p>
+</article>
+<article class="term" id="t93" data-term="t93">
+<h3 class="term-title"><a class="anchor" href="#t93">TensorFlow</a></h3>
+<p><strong>TensorFlow＝Google が開発したオープンソースの機械学習ライブラリ</strong><br>TensorFlow は、Google が開発・提供している<strong>オープンソースの機械学習ライブラリ</strong>で、特にディープラーニング（深層学習）の構築・訓練・実行に強みを持っています。<br>特徴は以下の通りです：</p>
+<ul><li>Python 対応で直感的に使える</li><li>ニューラルネットワークの構築やトレーニングに適している</li><li>モデルのデプロイ先としてクラウド、モバイル、Web など幅広く対応</li><li>Google Cloud（特に Agent Platform）との統合も可能</li></ul>
+<p class="callout note"><strong>モデルを自分で作る側</strong>のツールです。学習済みモデルをそのまま使う Model Garden や、コード不要の AutoML とは立ち位置が異なります。</p>
+<p class="callout note">エッジ向けの実行環境である <strong>LiteRT</strong> は、もともと TensorFlow Lite として TensorFlow から派生したものです。</p>
+</article>
+<article class="term" id="t94" data-term="t94">
+<h3 class="term-title"><a class="anchor" href="#t94">Cloud クライアント ライブラリ</a></h3>
+<p>Cloud クライアント ライブラリは、Google Cloud API を使うときに<strong>推奨されている公式ライブラリ</strong>です。<br>Python、Java、Go、Node.js、C#、PHP、Ruby などの各言語向けに提供されており、その言語の作法に沿った自然な書き方で API を呼び出せます。<br>認証、リトライ、エラー処理などが組み込まれているため、REST や gRPC を直接扱うよりも実装が簡単で安全です。</p>
+</article>
+</section>
+<section class="chapter" id="c8" data-chapter="c8">
+<h2 class="chapter-title">第8章 事前構築済み AI API</h2>
+<article class="term" id="t95" data-term="t95">
+<h3 class="term-title"><a class="anchor" href="#t95">Cloud Vision API</a></h3>
+<p>Cloud Vision API は、<strong>画像の内容を解析するための Google Cloud の事前構築済み AI API</strong> です。<br>アプリケーションに画像認識機能を組み込み、画像に何が写っているかを自動的に判定できます。<br>主な用途には、画像に含まれる物体や概念を分類する画像ラベリング、顔やランドマークの検出、画像内の文字を読み取る OCR、不適切コンテンツの識別などがあります。<br>そのため、写真、スキャン画像、Web 上の画像などを対象に、画像検索、コンテンツ管理、本人確認補助、画像内テキストの抽出など、幅広い業務で活用できます。</p>
+</article>
+<article class="term" id="t96" data-term="t96">
+<h3 class="term-title"><a class="anchor" href="#t96">光学式文字認識（OCR）</a></h3>
+<p><strong>OCR＝画像や紙の文書に写った文字を、機械が処理できるテキストデータに変換する技術</strong><br>光学式文字認識（OCR）は、<strong>画像やスキャンされた文書に含まれる文字を読み取り、機械が処理できるテキストデータに変換する技術</strong>です。<br>紙の書類やPDF、写真などに含まれる文字情報をデジタル化するために広く利用されています。<br>Google Cloud では <strong>Document AI</strong> などのサービスでOCR機能が提供されており、印刷文字だけでなく手書き文字や複数言語にも対応しています。</p>
+<p class="callout note"><strong>Cloud Vision API</strong> でも画像内テキストの検出ができます。単に文字を取り出したいなら Vision API、請求書や契約書のように<strong>項目単位で構造化して抽出</strong>したいなら Document AI、という使い分けです。</p>
+<p class="callout note">OCR でテキスト化すれば、その後は検索・分析・要約・翻訳といった処理につなげられます。非構造化データを活用可能にする入口の技術です。</p>
+</article>
+<article class="term" id="t97" data-term="t97">
+<h3 class="term-title"><a class="anchor" href="#t97">Video Intelligence API（旧称：Cloud Video Intelligence API）</a></h3>
+<p><strong>Video Intelligence API＝動画内の物体、シーン、ショット、音声、テキストなどを分析する動画理解 API</strong><br>Video Intelligence API は、<strong>動画ファイルを分析し、動画内に含まれる情報を自動的に抽出するための Google Cloud の事前構築済み AI API</strong> です。</p>
+</article>
+<article class="term" id="t98" data-term="t98">
+<h3 class="term-title"><a class="anchor" href="#t98">Speech-to-Text API</a></h3>
+<p><strong>Speech-to-Text API＝音声をテキストに変換する音声認識 API</strong><br>Speech-to-Text API は、<strong>音声データをテキストに変換するための Google Cloud の事前構築済み AI API</strong> です。<br>会話、会議、講義、通話、動画内の音声などを文字起こしする用途で使われます。<br>リアルタイム音声の認識だけでなく、録音済みの音声ファイルや動画ファイルに含まれる音声のテキスト化にも対応できます。<br>多言語対応、句読点の自動挿入、話者分離などの機能により、音声情報を検索・分析・保存しやすい形にできます。</p>
+</article>
+<article class="term" id="t99" data-term="t99">
+<h3 class="term-title"><a class="anchor" href="#t99">Text-to-Speech API</a></h3>
+<p><strong>Text-to-Speech API＝テキストを自然な音声に変換する音声合成 API</strong><br>Text-to-Speech API は、<strong>入力されたテキストを自然な音声に変換するための Google Cloud の事前構築済み AI API</strong> です。<br>文章やメッセージを音声として読み上げる機能を、アプリケーションやサービスに組み込むために使います。</p>
+</article>
+<article class="term" id="t100" data-term="t100">
+<h3 class="term-title"><a class="anchor" href="#t100">VUI（Voice User Interface）</a></h3>
+<p><strong>VUI＝音声で操作・対話するユーザーインターフェース。Speech-to-Text と Text-to-Speech の組み合わせで実現する</strong><br>VUI（Voice User Interface）は大きく次の流れで成立します。</p>
+<ul><li>①ユーザーの音声を文字にする → <strong>Speech-to-Text</strong></li><li>②（必要なら理解・応答生成：例 Gemini / Agent Platform など）</li><li>③応答テキストを音声で返す → <strong>Text-to-Speech</strong></li></ul>
+<p>つまり、<strong>音声入力→テキスト化</strong>と<strong>テキスト応答→音声化</strong>のペアが代表的なAPI組み合わせです。</p>
+<p class="callout note">「電話やスマートスピーカーで音声対話させたい」という要件が出たら、この2つの API を軸に考えます。コンタクトセンターの音声対応（Conversational Agents / CCaaS）も同じ構成です。</p>
+</article>
+<article class="term" id="t101" data-term="t101">
+<h3 class="term-title"><a class="anchor" href="#t101">Natural Language API</a></h3>
+<p>Natural Language API は、<strong>テキストを解析して意味や特徴を抽出するための AI API</strong>です。<br>文章に含まれる感情、話題、人物名・組織名・場所などの固有表現、文の構造などを分析できます。<br>また、顧客レビュー、問い合わせ文、SNS投稿、記事などの大量のテキストから、傾向や重要な情報を把握する用途に適しています。</p>
+</article>
+<article class="term" id="t102" data-term="t102">
+<h3 class="term-title"><a class="anchor" href="#t102">Translation API</a></h3>
+<p>Translation API は、<strong>テキストを別の言語に翻訳するための Google Cloud の事前構築済み AI API</strong> です。入力された文章や文字列を、指定した言語に自動翻訳できます。<br><strong>Translation API＝テキストを他言語に翻訳する API</strong></p>
+<p class="callout note">後述の <strong>Document Translation</strong> は独立したサービスではなく、Cloud Translation API（Advanced / v3）の機能の一つです。</p>
+</article>
+<article class="term" id="t103" data-term="t103">
+<h3 class="term-title"><a class="anchor" href="#t103">Document Translation（Cloud Translation API の機能）</a></h3>
+<p><strong>Document Translation＝文書を翻訳し、元のレイアウトやフォーマットを保持する翻訳機能</strong><br>Document Translation は、文書ファイルを翻訳するための機能です。<br>単に文章だけを翻訳するのではなく、PDF、Word、PowerPoint などの文書全体を対象にし、元のレイアウトや書式をできるだけ保持したまま翻訳できる点が特徴です。</p>
+<p class="callout note">独立したサービスではなく、<strong>Cloud Translation API（Advanced / v3）が備える機能の一つ</strong>である点に注意。</p>
+</article>
+<article class="term" id="t104" data-term="t104">
+<h3 class="term-title"><a class="anchor" href="#t104">Document AI API</a></h3>
+<p>Document AI API は、<strong>請求書、契約書、フォーム、ID などのドキュメントを解析するための AI API</strong>です。<br>PDF や紙文書に含まれる文章や項目を読み取り、必要な情報を抽出・分類して構造化できます。<br>これにより、手入力が必要だった文書処理を自動化し、業務システムで扱いやすいデータとして活用できます。</p>
+</article>
+</section>
+<section class="chapter" id="c9" data-chapter="c9">
+<h2 class="chapter-title">第9章 業務で使う Google の AI 製品</h2>
+<article class="term" id="t105" data-term="t105">
+<h3 class="term-title"><a class="anchor" href="#t105">Gemini Enterprise</a></h3>
+<p>Gemini Enterprise は、<strong>Google AI をすべての従業員に提供するための企業向けエージェント型プラットフォーム</strong>です。<br>Google Workspace や Microsoft 365 などの業務アプリに安全に接続し、業務データに基づいた回答や分析を行うことができます。</p>
+<p class="callout warn">Gemini Enterprise は、単なる個人向け AI プランや基盤モデルではなく、「業務データに接続し、AI エージェントを作成・管理・利用できる企業向けプラットフォーム」である点を押さえることが重要です。</p>
+<p class="callout warn"><strong>Gemini Enterprise（業務利用者向け）</strong> と <strong>Gemini Enterprise Agent Platform ＝ Agent Platform（旧 Vertex AI／開発者向け基盤）</strong> は名前が似ていますが<strong>別物</strong>です。最も混同しやすいポイントなので区別して覚えること。</p>
+</article>
+<article class="term" id="t106" data-term="t106">
+<h3 class="term-title"><a class="anchor" href="#t106">Google Workspace における Gemini</a></h3>
+<p><strong>Gemini for Google Workspace＝Gmail や Docs などの業務アプリ内で生成 AI を使い、生産性を高める機能</strong><br>Google Workspace における Gemini は、Gmail、Google ドキュメント、スプレッドシート、スライド、Meet などの業務アプリに組み込まれた生成 AI 機能です。<br>ユーザーは普段使っているアプリの中で、文章作成、要約、翻訳、アイデア出し、表の作成、会議内容の整理などを支援してもらえます。</p>
+</article>
+<article class="term" id="t107" data-term="t107">
+<h3 class="term-title"><a class="anchor" href="#t107">Google Vids</a></h3>
+<p><strong>Google Vids＝Google Workspace に統合された AI 搭載の動画作成ツール</strong><br>Google Vids は、<strong>Google Workspace に統合された AI 搭載の動画作成ツール</strong>です。<br>主な特徴は以下の通りです：</p>
+<ul><li><strong>Gemini AI との連携</strong>：ユーザーが入力したテキストや提供した資料に基づき、動画のストーリーやスクリプト、BGMなどを提案します。</li><li><strong>豊富なテンプレート</strong>：多数のテンプレートが用意されており、初心者でも簡単にプロフェッショナルな動画を作成できます。</li><li><strong>リアルタイム共同編集</strong>：Google ドキュメントやスライドと同様に、複数のメンバーで同時に動画を編集できます。</li><li><strong>クラウドベースの操作</strong>：ウェブブラウザから直接アクセスでき、特別なソフトウェアや動画編集スキルがなくても動画を作成できます。</li></ul>
+<p class="callout note">動画を「生成」する <strong>Veo</strong> とは役割が違います。Vids は業務資料としての動画を<strong>作成・編集するアプリ</strong>、Veo は<strong>動画そのものを生成するモデル</strong>です。</p>
+</article>
+<article class="term" id="t108" data-term="t108">
+<h3 class="term-title"><a class="anchor" href="#t108">Gemini for Google Cloud</a></h3>
+<p><strong>Gemini for Google Cloud＝Google Cloud 上での開発・運用作業を支援する生成AIアシスタント</strong><br>Gemini for Google Cloud は、<strong>Google Cloud プラットフォーム上での開発者作業を支援する生成AIアシスタント</strong>です。<br>主な特徴は以下の通りです：</p>
+<ul><li>コード生成とデバッグ支援（例：Cloud Shell や Cloud Code 統合）</li><li>BigQuery でのクエリ作成支援</li><li>セキュリティ構成のチェックや提案（例：IAM 設定、脆弱性検知）</li><li>リソース最適化や構成ガイドの提示</li><li>自然言語による対話型操作（チャット形式）</li></ul>
+<p class="callout note"><strong>Gemini for Google Workspace</strong> が業務アプリ（Gmail / Docs など）側の支援、<strong>Gemini for Google Cloud</strong> が開発・運用側の支援、という住み分けです。</p>
+<p class="callout note">Gemini for Google Cloud は<strong>ポートフォリオ（総称）</strong>であり、その中に <strong>Gemini Cloud Assist</strong>（クラウド運用支援）や <strong>Gemini Code Assist</strong>（コーディング支援）といった個別の製品が含まれます。</p>
+<h4 class="sub-title">Gemini Cloud Assist</h4>
+<p>Gemini Cloud Assist は、Google Cloud の開発者・運用担当者向けに設計された生成AI支援機能です。<br>主な機能：</p>
+<ul><li><strong>コード支援</strong>：Cloud Shell や Cloud Workstations でのコード提案、バグ検出</li><li><strong>運用サポート</strong>：Cloud Monitoring やログ分析での問題特定・改善提案</li><li><strong>セキュリティ改善</strong>：IAM の設定確認、権限レビュー支援</li><li><strong>BigQuery 支援</strong>：SQL クエリの生成や説明</li><li><strong>インフラ操作</strong>：Cloud Run、GKE などのサービスに対する操作ガイドや構成案の提案</li></ul>
+<p>これにより、エンジニアは高度な技術作業を効率化し、迅速な意思決定と問題解決が可能になります。</p>
+<p class="callout note">Google Cloud コンソール上のチャットパネルから直接使えるほか、各サービスの管理画面にも組み込まれています。</p>
+</article>
+<article class="term" id="t109" data-term="t109">
+<h3 class="term-title"><a class="anchor" href="#t109">Gemini in BigQuery</a></h3>
+<p><strong>Gemini in BigQuery＝BigQuery 上のデータ分析作業を生成AIで支援する機能</strong><br>Gemini in BigQuery は、<strong>データアナリストやエンジニアが BigQuery 上での作業をよりスムーズに行えるように支援する生成AI機能</strong>です。<br>主な機能：</p>
+<ul><li><strong>自然言語クエリ生成</strong>：「昨年の売上トップ5は？」と聞けば対応する SQL を自動生成</li><li><strong>コード補完</strong>：SQL や Python の構文提案、コードの自動生成</li><li><strong>データ準備</strong>：フィルタ、結合、集計などの前処理作業を補助</li><li><strong>可視化支援</strong>：データのチャート・グラフ化を簡単に提案</li></ul>
+<p class="callout note">Gemini for Google Cloud の一部として、BigQuery に組み込まれた形で提供されます。</p>
+</article>
+<article class="term" id="t110" data-term="t110">
+<h3 class="term-title"><a class="anchor" href="#t110">Gem</a></h3>
+<p>「Gem」とは、Gemini における <strong>カスタマイズ可能なAIアシスタント</strong> を指します。<br>ユーザーは Gem を作成して、自分の用途やニーズに合わせた指示や知識を持たせることができます。</p>
+<h4 class="sub-title">プリメイド Gem（Premade Gem）</h4>
+<p>プリメイド Gem とは、<strong>Google であらかじめ用意されている AIアシスタント</strong>です。<br>「文章の校正役」「アイデア出し相手」「コーディングの相棒」などが最初から用意されており、自分で作らなくてもすぐに使えます。</p>
+<p class="callout note"><strong>自分で作るのが Gem、最初から用意されているのがプリメイド Gem</strong>という区別で押さえておくとよいです。</p>
+</article>
+<article class="term" id="t111" data-term="t111">
+<h3 class="term-title"><a class="anchor" href="#t111">NotebookLM</a></h3>
+<p>NotebookLM は、<strong>ユーザーが自分の資料（PDF、Webページなど）をアップロードし、その内容に忠実（＝グラウンディング）に基づいた質問応答や要約、アイデア展開を可能にするAI研究アシスタント</strong>です。<br>特に、学習・分析・ライティング支援の用途で効果を発揮します。</p>
+</article>
+<article class="term" id="t112" data-term="t112">
+<h3 class="term-title"><a class="anchor" href="#t112">Customer Engagement Suite</a></h3>
+<p>Googleが提供する顧客とのコミュニケーションや関係構築を支援するための統合されたクラウドベースのプラットフォームです。</p>
+<p>Customer Engagement Suite は、主に以下のプロダクトで構成されています。</p>
+<h4 class="sub-title">Conversational Agents（会話エージェント）</h4>
+<p>AIボットが24時間365日、音声やテキストで高精度な一次対応を実施。Geminiの自然な対話能力やマルチモーダル機能（画像・動画の理解）を活用して柔軟に応対。</p>
+<h4 class="sub-title">Agent Assist（エージェント アシスト）</h4>
+<p>人間のオペレーター（担当者）をリアルタイムで支援。<br>会話内容を分析してリアルタイムで回答案を提示したり、複雑な手順のガイド（コーチング）、終話後の要約作成などを自動化。</p>
+<h4 class="sub-title">Conversational Insights（会話型インサイト/会話型分析情報）</h4>
+<p>顧客とのすべての会話データをAIで分析。<br>顧客の感情変化や問い合わせのトレンドを可視化し、サービス改善や自動採点（品質管理）に活用。</p>
+<h4 class="sub-title">Google Cloud Contact Center as a Service（CCaaS）</h4>
+<p>Google Cloud Contact Center as a Service（CCaaS） は、Google Cloud の <strong>セキュリティ、プライバシー、AI イノベーションを基盤に構築</strong>された クラウドネイティブなエンタープライズグレードのオムニチャネルコンタクトセンターソリューションです。<br>電話・チャット・メールなどすべてのチャネルでシームレスかつ一貫した顧客体験を提供し、企業のカスタマーサポートを高度化します。<br>単に電話回線をクラウド化するだけでなく、Google の高度な AI（Gemini 等）を基盤に組み込むことで、<strong>「顧客対応の自動化」「オペレーターの作業効率化」「センター全体のデータ分析」を一つのシステム上でまとめて実現できる</strong>のが最大の特徴です<br>クラウド型のコンタクトセンター基盤。既存のCRM（Salesforceなど）や既存システム、多言語翻訳（100言語以上）と柔軟に連携。</p>
+</article>
+</section>
+<section class="chapter" id="c10" data-chapter="c10">
+<h2 class="chapter-title">第10章 AI戦略と責任あるAI</h2>
+<article class="term" id="t113" data-term="t113">
+<h3 class="term-title"><a class="anchor" href="#t113">AIファースト戦略</a></h3>
+<p><strong>AI ファースト戦略＝Google 製品全体に AI を統合し、ユーザー体験とイノベーションを高める考え方</strong><br>Google の「AIファースト戦略」は 2016 年に打ち出された方針で、<strong>Gmail、Google Docs、検索、Cloud などのあらゆる製品・サービスに AI を組み込むことで、ユーザー価値を高める</strong>という考え方です。<br>Googleは AI をエコシステム全体に統合することで、利便性とイノベーションを最大化しています。</p>
+<p class="callout note">生成AIに限定した戦略ではなく、機械学習全般を含む広い概念である点に注意。近年はその延長として、生成AI・AIエージェントの統合が進んでいます。</p>
+</article>
+<article class="term" id="t114" data-term="t114">
+<h3 class="term-title"><a class="anchor" href="#t114">AI の民主化</a></h3>
+<p>AI の専門知識を持つ一部のエンジニアやデータサイエンティストだけでなく、より多くのユーザーが AI を利用できるようにする考え方です。</p>
+</article>
+<article class="term" id="t115" data-term="t115">
+<h3 class="term-title"><a class="anchor" href="#t115">生成AI活用の組織への定着（トップダウンとボトムアップ）</a></h3>
+<p><strong>組織定着の鍵＝経営層のトップダウンと、現場のボトムアップの両輪</strong><br>企業における生成AI活用の成功には、「トップダウン」と「ボトムアップ」の<strong>両輪</strong>が必要です。</p>
+<ul><li><strong>トップダウン</strong>では、経営層が明確なビジョンやAI戦略を掲げ、リソース配分や方針決定をリードします。<br>これにより、AI活用が単なる一時的な施策ではなく、全社戦略と結びついた継続的な取り組みとなります。</li><li><strong>ボトムアップ</strong>では、現場の社員が業務上の課題やニーズに基づいてAI活用アイデアを提案し、小さな成功体験を積み重ねることで、実用性と現場適合性の高いユースケースが育ちます。</li></ul>
+<p>この両者を連携させることで、戦略と現場の実装が乖離せずに進み、組織全体でのAI定着が可能になります。</p>
+<p class="callout warn"><strong>どちらか一方では定着しません。</strong> トップダウンだけでは現場で使われない施策になり、ボトムアップだけでは個人の工夫にとどまって全社展開されません。設問で「最も望ましいアプローチ」を問われたら、<strong>両方を組み合わせる選択肢</strong>が正解になります。</p>
+<p class="callout note">あわせて、<strong>人材育成（AIリテラシー教育）</strong>と<strong>利用ガイドラインの整備</strong>が定着を支えます。</p>
+</article>
+<article class="term" id="t116" data-term="t116">
+<h3 class="term-title"><a class="anchor" href="#t116">Responsible AI（責任あるAI）</a></h3>
+<p><strong>Responsible AI＝AI を公平・透明・安全に使い、説明責任を果たすための方針と実践</strong><br>Google は AI 開発の指針として <strong>AI 原則</strong> を掲げており、生成 AI の活用でも以下の観点が重要になります。</p>
+<ul><li><strong>公平性（Fairness）</strong>：特定の属性や集団に不利益を与えないこと。学習データの偏りがバイアスにつながる。</li><li><strong>説明可能性・透明性（Explainability / Transparency）</strong>：なぜその出力になったかを説明できること。</li><li><strong>プライバシー</strong>：個人情報や機密情報を適切に保護すること。</li><li><strong>安全性・セキュリティ</strong>：有害な出力や悪用を防ぐこと。</li><li><strong>アカウンタビリティ（説明責任）</strong>：AI の判断に対して人間が責任を持つこと。</li></ul>
+<p class="callout note">実装面では、セーフティフィルタや <strong>Model Armor</strong>（プロンプトインジェクション等からモデルを保護する仕組み）などが用いられます。</p>
+</article>
+<article class="term" id="t117" data-term="t117">
+<h3 class="term-title"><a class="anchor" href="#t117">説明可能性（Explainability）／Explainable AI</a></h3>
+<p><strong>説明可能性＝AI が出した個々の判断について、その根拠を人間が理解できる形で示すこと</strong><br>説明可能性（Explainability）とは、<strong>AI が出した個々の回答や判断について、なぜそのような結果になったのかを人間が理解できる形で示す</strong>ことです。<br>どの入力や特徴量が結果に影響したのかを示すことで、利用者が出力を検証し、納得して使えるようになります。</p>
+<p>Explainable AI の主目的は、<strong>モデルがどの要因に基づいてその予測を出したのかを説明可能にすること</strong>です。<br>具体的には：</p>
+<ul><li>各特徴量の寄与度を可視化</li><li>なぜその予測が出たのかを理解可能にする</li><li>判断の妥当性を検証可能にする</li></ul>
+<p>これは Responsible AI の中核要素である「<strong>透明性</strong>」「<strong>説明責任</strong>」に直結します。</p>
+<p class="callout note">融資審査や採用選考のように<strong>判断根拠の提示が求められる領域</strong>では必須の考え方です。「なぜ落ちたのか説明できない AI」は業務に組み込めません。</p>
+<p class="callout note">Google Cloud では、特徴量の寄与度を算出する機能が <strong>Explainable AI</strong> として提供されています。</p>
+</article>
+<article class="term" id="t118" data-term="t118">
+<h3 class="term-title"><a class="anchor" href="#t118">透明性（Transparency）</a></h3>
+<p>透明性は、<strong>AI システム全体について、利用目的、データの扱い、制限、リスクなどを明らかにする</strong>ことです。</p>
+<p class="callout note"><strong>説明可能性は「個々の出力の理由」、透明性は「システム全体の情報開示」</strong>という違いを押さえておくとよいです。</p>
+</article>
+<article class="term" id="t119" data-term="t119">
+<h3 class="term-title"><a class="anchor" href="#t119">モデルカード（Model Card）</a></h3>
+<p><strong>モデルカード＝モデルの用途・性能・限界・リスクをまとめ、安全に使えるようにする公式ドキュメント</strong><br>モデルカードは、<strong>生成AIモデルや機械学習モデルについて、利用者や関係者が安全かつ適切に理解・利用できるように情報を整理した公式ドキュメント</strong>です。<br>具体的には、次のような内容を説明します。</p>
+<ul><li>モデルの想定ユースケース</li><li>学習方法や評価方法</li><li>性能特性</li><li>得意なこと・苦手なこと</li><li>制限事項</li><li>バイアスやリスク</li><li>責任あるAI利用に関する注意点</li><li>推奨される利用方法</li></ul>
+<p class="callout note"><strong>透明性（Transparency）を実現するための具体的な手段</strong>です。「このモデルは何ができて何ができないのか」を利用者が判断できる状態にします。</p>
+<p class="callout note">Model Garden で公開されているモデルにも、それぞれモデルカードが用意されています。</p>
+</article>
+<article class="term" id="t120" data-term="t120">
+<h3 class="term-title"><a class="anchor" href="#t120">データカード（Data Card）</a></h3>
+<p><strong>データカード＝データセットの内容・収集方法・品質・バイアスを説明するドキュメント</strong><br>データセットの内容・収集方法・品質・バイアスなどを説明するものです。</p>
+<p class="callout note"><strong>モデルカードがモデルについての説明、データカードは学習データについての説明</strong>という対応関係です。</p>
+<p class="callout note">データの偏りはそのままバイアスにつながるため、<strong>代表性</strong>が確保されているかを判断する材料になります。</p>
+</article>
+<article class="term" id="t121" data-term="t121">
+<h3 class="term-title"><a class="anchor" href="#t121">アカウンタビリティ（説明責任）</a></h3>
+<p><strong>アカウンタビリティ＝AI の設計・データ・評価・影響を説明できるようにし、責任を持つこと</strong><br>生成 AI におけるアカウンタビリティ（説明責任）とは、<strong>AI システムの設計、開発、運用、出力結果による影響について、組織や開発者が責任を持つという考え方</strong>です。<br>AI が不正確な回答をしたり、不公平な判断をしたりした場合に、「なぜその結果になったのか」「どのデータや手法を使ったのか」「どのように評価したのか」を説明できる状態にしておくことが重要です。</p>
+</article>
+<article class="term" id="t122" data-term="t122">
+<h3 class="term-title"><a class="anchor" href="#t122">責任ある生成 AI ツールキット（Responsible Generative AI Toolkit）</a></h3>
+<p><strong>Responsible Generative AI Toolkit＝責任あるAIを実践するための、Google の開発者向けガイドとツール群</strong><br>責任ある生成 AI ツールキット（Responsible Generative AI Toolkit）は、<strong>Googleが提供する開発者向けの実践的なガイドとツール群</strong>です。<br>生成AIを活用したアプリケーションを開発する際に、安全性、公平性、事実性、説明責任などの観点からリスクを予測し、設計・実装・評価プロセス全体で責任あるAI原則を反映できるよう支援します。<br>主な特徴：</p>
+<ul><li>プロンプトのデバッグやファインチューニング手法の紹介</li><li>安全性ガイドラインとLLM比較評価ツール</li><li>不正使用防止のための分類・フィルタリングツール</li><li>RLHF（人間のフィードバックによる強化学習）の活用方法</li></ul>
+<p class="callout note"><strong>Responsible AI の「原則」を、実際の開発作業に落とし込むための道具立て</strong>という位置づけです。方針を掲げるだけで終わらせないための支援策として押さえておくとよいです。</p>
+<p class="callout note">AI システム全体のセキュリティ設計指針が <strong>SAIF</strong>、開発時に責任あるAIを実践するのがこのツールキット、という住み分けです。</p>
+</article>
+<article class="term" id="t123" data-term="t123">
+<h3 class="term-title"><a class="anchor" href="#t123">Human-in-the-loop（HITL）</a></h3>
+<p><strong>HITL＝AI の処理の途中や結果に人間が関与し、確認・修正・承認を行う仕組み</strong><br>AI に完全に任せるのではなく、重要な判断や高リスクな処理には人間のチェックを挟むことで、誤りやバイアスの影響を抑えます。<br>Responsible AI を実運用に落とし込むうえで重要な考え方です。</p>
+</article>
+</section>
+<section class="chapter" id="c11" data-chapter="c11">
+<h2 class="chapter-title">第11章 セキュリティとガバナンス</h2>
+<article class="term" id="t124" data-term="t124">
+<h3 class="term-title"><a class="anchor" href="#t124">安全フィルタ（Safety Filter）</a></h3>
+<p><strong>安全フィルタ＝有害・不適切・危険な内容を検出し、ブロックや制御を行うための仕組み</strong><br>生成 AI における安全フィルタ（Safety Filter）は、<strong>モデルの入力や出力に、有害・不適切・危険な内容が含まれる可能性を検出し、必要に応じてブロックや制御を行う仕組み</strong>です。<br>ヘイト表現、ハラスメント、性的な内容、危険行為などのカテゴリごとに、どの程度でブロックするかのしきい値を調整できます。</p>
+<p class="callout note">Responsible AI の「安全性」を実装レベルで担保する手段のひとつです。</p>
+</article>
+<article class="term" id="t125" data-term="t125">
+<h3 class="term-title"><a class="anchor" href="#t125">レッドチームテスト（Red Teaming）</a></h3>
+<p><strong>レッドチームテスト＝あえて攻撃側の視点で AI を試し、弱点やリスクを事前に洗い出す評価手法</strong><br>レッドチームテストとは、<strong>AIシステムの弱点やリスクを見つけるために、意図的に攻撃的・敵対的な条件でテストを行う評価手法</strong>です。<br>セキュリティ専門家やAI研究者などのチームが、AIに対してさまざまな入力やシナリオを試し、問題が発生する可能性を調査します。</p>
+<p>具体的には、次のような観点で試します。</p>
+<ul><li>安全フィルタを回避して有害な出力を引き出せないか（ジェイルブレイク）</li><li>プロンプトインジェクションで指示を乗っ取れないか</li><li>学習データに含まれる個人情報や機密情報を吐き出させられないか</li><li>特定の属性に対して不公平・差別的な出力をしないか</li></ul>
+<p class="callout note"><strong>リリース前に自分たちで攻撃してみる</strong>ことで、悪意ある第三者に見つかる前に対策を打つのが目的です。</p>
+<p class="callout note">Responsible AI の「安全性」を、机上の方針ではなく<strong>実際に検証する</strong>手段にあたります。</p>
+</article>
+<article class="term" id="t126" data-term="t126">
+<h3 class="term-title"><a class="anchor" href="#t126">仮名化（Pseudonymization）</a></h3>
+<p><strong>仮名化＝機密データの値を、暗号で生成したトークンに置き換える手法</strong><br>仮名化は、<strong>機密データの値を暗号で生成されたトークンに置き換える手法</strong>です。<br>Google Cloud の <strong>Sensitive Data Protection</strong> では、仮名化はトークン化やサロゲート置換とも呼ばれることがあり、元の機密値を対応するトークンに置き換える方法として説明されています。<br>たとえば氏名やメールアドレスをトークンに置き換えたうえで AI に渡せば、<strong>元データを直接扱わずに分析や学習ができます</strong>。</p>
+<p class="callout note"><strong>匿名化との違い</strong>：仮名化は、鍵を持っていれば元の値に戻せる（可逆な場合がある）ため、それ単体では個人を特定できない状態とは限りません。完全に復元できなくする匿名化とは区別します。</p>
+<p class="callout note">生成AIの文脈では、プロンプトや学習データから<strong>個人情報を除いたうえでモデルに渡す</strong>ための前処理として使われます。ポストプロセッシングでの PII マスキングと合わせて考えます。</p>
+</article>
+<article class="term" id="t127" data-term="t127">
+<h3 class="term-title"><a class="anchor" href="#t127">Secure AI Framework（SAIF）</a></h3>
+<p><strong>SAIF＝AI システムをセキュリティ面から安全に設計・運用するための包括的なフレームワーク</strong><br>SAIF（Secure AI Framework）は、<strong>AI システムを安全に設計・構築・運用するための包括的なセキュリティフレームワーク</strong>です。<br>AI や機械学習の利用が広がる中で、データ漏えい、モデルの不正利用、データポイズニング、モデル流出、改ざんなどのリスクに対応する考え方を整理しています。<br>SAIF では、AI モデルや関連データを保護するために、アクセス制御、監視、ログ管理、データ保護、リスク評価などを重視します。<br>AI を便利に使うだけでなく、企業が安全に導入・運用するための設計指針として理解することが重要です。</p>
+</article>
+<article class="term" id="t128" data-term="t128">
+<h3 class="term-title"><a class="anchor" href="#t128">Mandiant コンサルティング</a></h3>
+<p><strong>Mandiant コンサルティング＝生成AIのセキュリティリスク評価と脆弱性特定に強みを持つ、Google Cloud のセキュリティコンサルティング</strong><br>Mandiant コンサルティングは、Google Cloud が提供する<strong>セキュリティコンサルティングサービス</strong>であり、特に<strong>生成 AI モデルに関連するセキュリティリスクの評価と脆弱性の特定</strong>に重点を置いています。<br>このサービスの主な特徴は以下の通りです：</p>
+<ul><li><strong>生成 AI モデルのセキュリティ評価</strong>：AI サービスに特有の攻撃や、AI に依存するアプリケーションに対する攻撃をシミュレートし、リスクを特定します。</li><li><strong>Secure AI Framework（SAIF）に基づく評価</strong>：Google の Secure AI Framework（SAIF）に基づき、AI 実装のエンドツーエンドのセキュリティを評価します。</li><li><strong>トレーニングデータとデータ保護のガバナンスの評価</strong>：トレーニングデータの保護やデータガバナンスの体制を評価し、セキュリティ上の課題を明らかにします。</li><li><strong>カスタムアプリケーションのセキュリティ評価</strong>：AI モデルを基盤とするカスタムアプリケーションのセキュリティを評価し、攻撃者による悪用前に弱点を特定します。</li></ul>
+<p class="callout note"><strong>自社で実施するのがレッドチームテスト、専門家に依頼するのが Mandiant コンサルティング</strong>、と対応づけて覚えると整理しやすいです。</p>
+<p class="callout note">ツールや機能ではなく<strong>人による専門サービス</strong>である点が、SCC や IAM との違いです。</p>
+</article>
+<article class="term" id="t129" data-term="t129">
+<h3 class="term-title"><a class="anchor" href="#t129">Security Command Center（SCC）</a></h3>
+<p><strong>Security Command Center＝Google Cloud のセキュリティリスクや脅威を可視化し、一元管理するプラットフォーム</strong><br>Security Command Center（SCC）は、<strong>Google Cloud 環境のセキュリティ状態を一元的に把握・管理するためのセキュリティプラットフォーム</strong>です。<br>クラウドリソースに対する脆弱性、設定ミス、公開されたリソース、漏えいした認証情報、脅威などを検出し、管理者が対応しやすい形で可視化します。</p>
+</article>
+<article class="term" id="t130" data-term="t130">
+<h3 class="term-title"><a class="anchor" href="#t130">IAM（Identity and Access Management）</a></h3>
+<p><strong>IAM＝認証・認可により、Google Cloud リソースへのアクセス権限を管理する仕組み</strong><br>IAM（Identity and Access Management）は、<strong>Google Cloud のリソースに対して、誰が、どのリソースに、どの操作を実行できるかを管理するための仕組み</strong>です。<br>AI の文脈では、モデル、データセット、エージェント、ログなどへのアクセスを役割（ロール）単位で制御し、<strong>最小権限の原則</strong>を守るために使われます。</p>
+</article>
+</section>
+   </div>
+  </main>
+</div>
+
+<button id="top" aria-label="先頭へ戻る">&#8593;</button>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var KEY = "study-notes-theme";
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+  var btn = document.getElementById("themeBtn");
+  if (!btn) return;
+  btn.addEventListener("click", function () {
+    var dark = root.getAttribute("data-theme")
+      ? root.getAttribute("data-theme") === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next = dark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+  });
+})();
+</script>
+<script>
+(function () {
+  /* ---- drawer ---- */
+  var sidebar = document.getElementById("sidebar");
+  var overlay = document.getElementById("overlay");
+  function closeNav() { sidebar.classList.remove("open"); overlay.classList.remove("on"); }
+  document.getElementById("menuBtn").addEventListener("click", function () {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("on", sidebar.classList.contains("open"));
+  });
+  overlay.addEventListener("click", closeNav);
+  sidebar.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") closeNav();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { closeNav(); }
+  });
+
+  /* ---- search ---- */
+  var terms = [].slice.call(document.querySelectorAll(".term")).map(function (el) {
+    return { el: el, id: el.id, text: el.textContent.toLowerCase() };
+  });
+  var navTerms = {};
+  [].slice.call(document.querySelectorAll(".nav-term")).forEach(function (el) {
+    navTerms[el.getAttribute("data-target")] = el;
+  });
+  var chapters = [].slice.call(document.querySelectorAll(".chapter"));
+  var navChapters = [].slice.call(document.querySelectorAll(".nav-chapter"));
+  var input = document.getElementById("search");
+  var clearBtn = document.getElementById("clearBtn");
+  var empty = document.getElementById("empty");
+  var count = document.getElementById("count");
+  var mainEl = document.querySelector("main");
+
+  function run() {
+    var q = input.value.trim().toLowerCase();
+    clearBtn.classList.toggle("on", q.length > 0);
+    var hits = 0;
+
+    terms.forEach(function (t) {
+      var show = !q || t.text.indexOf(q) !== -1;
+      t.el.style.display = show ? "" : "none";
+      if (navTerms[t.id]) navTerms[t.id].style.display = show ? "" : "none";
+      if (show) hits++;
+    });
+
+    chapters.forEach(function (sec, i) {
+      var any = sec.querySelector('.term:not([style*="display: none"])');
+      sec.style.display = any ? "" : "none";
+      if (navChapters[i]) navChapters[i].style.display = any ? "" : "none";
+    });
+
+    empty.classList.toggle("on", q.length > 0 && hits === 0);
+    count.classList.toggle("on", q.length > 0);
+    count.textContent = q ? hits + " 件ヒット" : "";
+
+    mainEl.scrollTop = 0;
+    if (!window.matchMedia("(min-width: 900px)").matches) window.scrollTo(0, 0);
+  }
+
+  input.addEventListener("input", run);
+  clearBtn.addEventListener("click", function () { input.value = ""; run(); input.focus(); });
+  input.addEventListener("keydown", function (e) { if (e.key === "Escape") { input.value = ""; run(); } });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "/" && document.activeElement !== input) { e.preventDefault(); input.focus(); }
+  });
+
+  /* ---- active section in nav ---- */
+  if ("IntersectionObserver" in window) {
+    var current = null;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var nav = navTerms[en.target.id];
+        if (!nav || nav === current) return;
+        /* ハイライトのみ。メニュー側は自動スクロールさせない
+           （スムーススクロール中に通過した用語ごとに発火して目次が暴れるため） */
+        if (current) current.classList.remove("active");
+        nav.classList.add("active");
+        current = nav;
+      });
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    terms.forEach(function (t) { io.observe(t.el); });
+  }
+
+  /* ---- back to top ----
+     PC では main が、モバイルでは window がスクロール主体になるので両方を見る */
+  var top = document.getElementById("top");
+  function onScroll() {
+    top.classList.toggle("on", (mainEl.scrollTop || window.scrollY) > 500);
+  }
+  top.addEventListener("click", function () {
+    mainEl.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  mainEl.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
+})();
+</script>
+</body>
+</html>
