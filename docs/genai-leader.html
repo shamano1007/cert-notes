@@ -399,7 +399,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <li class="nav-term" data-target="t84"><a href="#t84">Colab Enterprise</a></li>
 <li class="nav-term" data-target="t85"><a href="#t85">Gen AI Evaluation Service</a></li>
 <li class="nav-term" data-target="t86"><a href="#t86">Agent Garden</a></li>
-<li class="nav-term" data-target="t87"><a href="#t87">Agent Engine</a></li>
+<li class="nav-term" data-target="t87"><a href="#t87">Agent Runtime（旧称：Agent Engine）</a></li>
 <li class="nav-term" data-target="t88"><a href="#t88">Agent Search（旧称：Vertex AI Search）</a></li>
 <li class="nav-term" data-target="t89"><a href="#t89">MLOps</a></li>
 <li class="nav-term" data-target="t90"><a href="#t90">ドリフトモニタリング（Drift Monitoring）</a></li>
@@ -435,7 +435,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <li class="nav-term" data-target="t114"><a href="#t114">Gemini in BigQuery</a></li>
 <li class="nav-term" data-target="t115"><a href="#t115">Gem</a></li>
 <li class="nav-term" data-target="t116"><a href="#t116">NotebookLM</a></li>
-<li class="nav-term" data-target="t117"><a href="#t117">Customer Engagement Suite</a></li>
+<li class="nav-term" data-target="t117"><a href="#t117">Gemini Enterprise for Customer Experience（旧称：Customer Engagement Suite）</a></li>
 </ul></li>
 <li class="nav-chapter" data-chapter="c10">
 <a href="#c10">第10章 AI戦略と責任あるAI</a><ul>
@@ -510,7 +510,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p>モデルを長期にわたって管理、保守するプロセスです。<br>バージョン管理、性能の監視、<strong>ドリフトモニタリング</strong>、必要に応じた再トレーニングなどを行います。</p>
 <p class="callout note">運用データの傾向が変わるとモデルの精度は下がっていくため、<strong>管理から①へ戻って回し続ける</strong>ことが前提になります。この考え方を体系化したものが <strong>MLOps</strong> です。</p>
 <h4 class="sub-title">各段階に対応する Google Cloud の主なサービス</h4>
-<ul><li><strong>①データの取り込みと準備</strong>：Cloud Storage（ファイル保存）、BigQuery（分析用データウェアハウス）、Feature Store（特徴量の一元管理）</li><li><strong>②モデルのトレーニング</strong>：Agent Platform の AutoML（コード不要）、カスタム トレーニング（独自モデルの学習）、Model Garden（学習済みモデルの活用）</li><li><strong>③モデルのデプロイ</strong>：Endpoints、Agent Engine（エージェントのマネージドランタイム）、Cloud Run</li><li><strong>④モデルの管理</strong>：Model Registry（バージョン管理）、Pipelines（ワークフロー自動化）、Agent Platform の MLOps ツール（モニタリング）</li></ul>
+<ul><li><strong>①データの取り込みと準備</strong>：Cloud Storage（ファイル保存）、BigQuery（分析用データウェアハウス）、Feature Store（特徴量の一元管理）</li><li><strong>②モデルのトレーニング</strong>：Agent Platform の AutoML（コード不要）、カスタム トレーニング（独自モデルの学習）、Model Garden（学習済みモデルの活用）</li><li><strong>③モデルのデプロイ</strong>：Endpoints、Agent Runtime（エージェントのマネージドランタイム）、Cloud Run</li><li><strong>④モデルの管理</strong>：Model Registry（バージョン管理）、Pipelines（ワークフロー自動化）、Agent Platform の MLOps ツール（モニタリング）</li></ul>
 </article>
 <article class="term" id="t4" data-term="t4">
 <h3 class="term-title"><a class="anchor" href="#t4">学習（Training）と推論（Inference）</a></h3>
@@ -961,9 +961,9 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <article class="term" id="t68" data-term="t68">
 <h3 class="term-title"><a class="anchor" href="#t68">「Agent（エージェント）」という語の使い分け</a></h3>
 <p><strong>同じ「エージェント」でも、文脈によって指すものが4種類ある</strong><br>試験でも実務でも紛らわしいポイントなので、整理して覚えておくとよいです。</p>
-<ul><li><strong>AI エージェント</strong>：目標達成のために自律的に観察・判断・ツール利用・行動を繰り返す AI システム。もっとも中心的な意味。</li><li><strong>プロダクト名の接頭辞「Agent 〜」</strong>：Agent Platform、Agent Studio、Agent Garden、Agent Search、Agent Engine、Agent Development Kit（ADK）など。<strong>旧 Vertex AI がエージェント中心のプラットフォームへ再編された</strong>ことを表す命名。</li><li><strong>強化学習のエージェント</strong>：環境の中で行動し、報酬をもとに学習する主体。AI エージェントとは別概念で、こちらは学習アルゴリズム上の用語。</li><li><strong>コンタクトセンターの agent（＝人間のオペレーター）</strong>：<strong>Agent Assist</strong> の「Agent」はこれ。AI ではなく<strong>人間の担当者を支援する</strong>機能である点に注意。</li></ul>
+<ul><li><strong>AI エージェント</strong>：目標達成のために自律的に観察・判断・ツール利用・行動を繰り返す AI システム。もっとも中心的な意味。</li><li><strong>プロダクト名の接頭辞「Agent 〜」</strong>：Agent Platform、Agent Studio、Agent Garden、Agent Search、Agent Runtime、Agent Development Kit（ADK）など。<strong>旧 Vertex AI がエージェント中心のプラットフォームへ再編された</strong>ことを表す命名。</li><li><strong>強化学習のエージェント</strong>：環境の中で行動し、報酬をもとに学習する主体。AI エージェントとは別概念で、こちらは学習アルゴリズム上の用語。</li><li><strong>コンタクトセンターの agent（＝人間のオペレーター）</strong>：<strong>Agent Assist</strong> の「Agent」はこれ。AI ではなく<strong>人間の担当者を支援する</strong>機能である点に注意。</li></ul>
 <p class="callout warn"><strong>Agent Assist だけは意味が違います。</strong> 「AI エージェントを補助する機能」ではなく「<strong>人間のオペレーターを AI が補助する</strong>機能」です。ここは引っかけとして出やすいポイントです。</p>
-<p class="callout note">一方、<strong>Conversational Agents</strong> の「Agents」は AI ボット側を指します。同じ Customer Engagement Suite の中でも意味が逆転しているため、セットで覚えておくと安全です。</p>
+<p class="callout note">一方、<strong>Conversational Agents（現 CX Agent Studio）</strong> の「Agents」は AI ボット側を指します。同じ Gemini Enterprise for CX（旧 Customer Engagement Suite）の中でも意味が逆転しているため、セットで覚えておくと安全です。</p>
 </article>
 <article class="term" id="t69" data-term="t69">
 <h3 class="term-title"><a class="anchor" href="#t69">推論ループ（Reasoning Loop）</a></h3>
@@ -991,7 +991,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p><strong>ADK＝コードで AI エージェントを構築・評価・デバッグ・デプロイするためのオープンソース開発フレームワーク</strong><br>Agent Development Kit（ADK）は、<strong>コードを使って AI エージェントを構築・評価・デバッグ・デプロイするための開発フレームワーク</strong>です。<br>Agent Studio が GUI やローコード寄りの開発環境であるのに対し、ADK は開発者がコードでエージェントの処理やツール連携を細かく設計する場合に使います。</p>
 <p>ADK は、単体のエージェントだけでなく、<strong>複数のエージェントを連携させるマルチエージェントシステムの構築</strong> にも利用できます。<br>試験では、ADK を <strong>「ノーコード開発スタジオ」ではなく、コードベースのオープンソース開発フレームワーク</strong> として押さえることが重要です。</p>
 <h4 class="sub-title">具体例</h4>
-<p>たとえば、社内問い合わせ対応エージェントを作る場合、ADK を使うと、社内ドキュメント検索、外部 API 呼び出し、回答生成などの処理をコードで定義できます。<br>さらに、動作確認やデバッグを行ったうえで、Agent Engine（Agent Platform のマネージドランタイム）、Cloud Run、Google Kubernetes Engine などへデプロイできます。</p>
+<p>たとえば、社内問い合わせ対応エージェントを作る場合、ADK を使うと、社内ドキュメント検索、外部 API 呼び出し、回答生成などの処理をコードで定義できます。<br>さらに、動作確認やデバッグを行ったうえで、Agent Runtime（Agent Platform のマネージドランタイム）、Cloud Run、Google Kubernetes Engine などへデプロイできます。</p>
 </article>
 <article class="term" id="t73" data-term="t73">
 <h3 class="term-title"><a class="anchor" href="#t73">A2A（Agent2Agent）プロトコル</a></h3>
@@ -1080,6 +1080,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p><strong>Gen AI Evaluation Service＝生成AIモデルの出力を、客観的・データドリブンに評価するサービス</strong><br>Gen AI Evaluation Service は、<strong>生成 AI モデルを客観的かつデータドリブンに評価するためのサービス</strong>です。<br>モデル移行、プロンプト改善、ファインチューニングなどの開発タスクを支援するために利用できます。</p>
 <p class="callout note">生成AIの出力は「正解が1つ」ではないため、人の感覚だけで良し悪しを判断すると比較になりません。<strong>同じ基準で数値化して比べられる</strong>ようにするのがこのサービスの役割です。</p>
 <p class="callout note">「モデルを A から B に乗り換えて品質は落ちないか」「プロンプトを変えて本当に良くなったか」を確かめる場面で使います。</p>
+<p class="callout note">Agent Platform への再編にあわせて、製品ページ上は <strong>Agent Platform Evals</strong> とも表記されます。ドキュメント上のサービス名は現在も Gen AI evaluation service のままです。</p>
 </article>
 <article class="term" id="t86" data-term="t86">
 <h3 class="term-title"><a class="anchor" href="#t86">Agent Garden</a></h3>
@@ -1087,10 +1088,11 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p class="callout note"><strong>Model Garden がモデルのカタログ、Agent Garden がエージェントのカタログ</strong>、という対応で覚えると混同しません。</p>
 </article>
 <article class="term" id="t87" data-term="t87">
-<h3 class="term-title"><a class="anchor" href="#t87">Agent Engine</a></h3>
-<p><strong>Agent Engine＝作成した AI エージェントを本番稼働させるマネージドランタイム</strong><br>Agent Engine は、<strong>開発した AI エージェントをデプロイして実行するための、Agent Platform のマネージド実行環境</strong>です。<br>サーバーやスケーリングを自分で用意しなくても、エージェントを本番環境で動かし続けられます。<br>セッション管理、モニタリング、評価などの運用機能も備えており、エージェントの状態を保持したまま対話を継続できます。</p>
-<p class="callout note"><strong>ADK との関係</strong>：ADK が「エージェントを<strong>作る</strong>ためのフレームワーク」、Agent Engine が「作ったエージェントを<strong>動かす</strong>場所」という役割分担です。ADK で開発したエージェントの主要なデプロイ先にあたります。</p>
-<p class="callout note">通常のモデルを公開する <strong>Endpoints</strong> に対し、Agent Engine は<strong>エージェント（モデル＋ツール＋推論ループ）</strong>をまるごと動かす点が異なります。Cloud Run や GKE にデプロイすることも可能です。</p>
+<h3 class="term-title"><a class="anchor" href="#t87">Agent Runtime（旧称：Agent Engine）</a></h3>
+<p><strong>Agent Runtime＝作成した AI エージェントを本番稼働させるマネージドランタイム</strong><br>Agent Runtime は、<strong>開発した AI エージェントをデプロイして実行するための、Agent Platform のマネージド実行環境</strong>です。<br>サーバーやスケーリングを自分で用意しなくても、エージェントを本番環境で動かし続けられます。<br>セッション管理、モニタリング、評価などの運用機能も備えており、エージェントの状態を保持したまま対話を継続できます。</p>
+<p class="callout note"><strong>ADK との関係</strong>：ADK が「エージェントを<strong>作る</strong>ためのフレームワーク」、Agent Runtime が「作ったエージェントを<strong>動かす</strong>場所」という役割分担です。ADK で開発したエージェントの主要なデプロイ先にあたります。</p>
+<p class="callout note">通常のモデルを公開する <strong>Endpoints</strong> に対し、Agent Runtime は<strong>エージェント（モデル＋ツール＋推論ループ）</strong>をまるごと動かす点が異なります。Cloud Run や GKE にデプロイすることも可能です。</p>
+<p class="callout warn"><strong>旧称は Agent Engine</strong> です。Agent Platform への再編にあわせて Agent Runtime に改称されました。試験ガイドの版によっては旧称で出題される可能性があります。</p>
 </article>
 <article class="term" id="t88" data-term="t88">
 <h3 class="term-title"><a class="anchor" href="#t88">Agent Search（旧称：Vertex AI Search）</a></h3>
@@ -1194,7 +1196,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p><strong>VUI＝音声で操作・対話するユーザーインターフェース。Speech-to-Text と Text-to-Speech の組み合わせで実現する</strong><br>VUI（Voice User Interface）は大きく次の流れで成立します。</p>
 <ul><li>①ユーザーの音声を文字にする → <strong>Speech-to-Text</strong></li><li>②（必要なら理解・応答生成：例 Gemini / Agent Platform など）</li><li>③応答テキストを音声で返す → <strong>Text-to-Speech</strong></li></ul>
 <p>つまり、<strong>音声入力→テキスト化</strong>と<strong>テキスト応答→音声化</strong>のペアが代表的なAPI組み合わせです。</p>
-<p class="callout note">「電話やスマートスピーカーで音声対話させたい」という要件が出たら、この2つの API を軸に考えます。コンタクトセンターの音声対応（Conversational Agents / CCaaS）も同じ構成です。</p>
+<p class="callout note">「電話やスマートスピーカーで音声対話させたい」という要件が出たら、この2つの API を軸に考えます。コンタクトセンターの音声対応（CX Agent Studio / CCaaS）も同じ構成です。</p>
 </article>
 <article class="term" id="t106" data-term="t106">
 <h3 class="term-title"><a class="anchor" href="#t106">Natural Language API</a></h3>
@@ -1222,6 +1224,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p><strong>Gemini Enterprise＝業務データに接続し、AI エージェントを作成・管理・利用できる企業向けプラットフォーム</strong><br>Gemini Enterprise は、<strong>Google AI をすべての従業員に提供するための企業向けエージェント型プラットフォーム</strong>です。<br>Google Workspace や Microsoft 365 などの業務アプリに安全に接続し、業務データに基づいた回答や分析を行うことができます。</p>
 <p class="callout warn">Gemini Enterprise は、単なる個人向け AI プランや基盤モデルではなく、「業務データに接続し、AI エージェントを作成・管理・利用できる企業向けプラットフォーム」である点を押さえることが重要です。</p>
 <p class="callout warn"><strong>Gemini Enterprise（業務利用者向け）</strong> と <strong>Gemini Enterprise Agent Platform ＝ Agent Platform（旧 Vertex AI／開発者向け基盤）</strong> は名前が似ていますが<strong>別物</strong>です。最も混同しやすいポイントなので区別して覚えること。</p>
+<p class="callout note"><strong>旧称は Google Agentspace</strong> です。Gemini Enterprise へ統合・改称されました。試験ガイドの版によっては Agentspace の名称で出題される可能性があります。</p>
 </article>
 <article class="term" id="t111" data-term="t111">
 <h3 class="term-title"><a class="anchor" href="#t111">Google Workspace における Gemini</a></h3>
@@ -1262,17 +1265,20 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 <p><strong>NotebookLM＝アップロードした自分の資料だけを根拠に、質問応答や要約を行う AI 研究アシスタント</strong><br>NotebookLM は、<strong>ユーザーが自分の資料（PDF、Webページなど）をアップロードし、その内容に忠実（＝グラウンディング）に基づいた質問応答や要約、アイデア展開を可能にするAI研究アシスタント</strong>です。<br>特に、学習・分析・ライティング支援の用途で効果を発揮します。</p>
 </article>
 <article class="term" id="t117" data-term="t117">
-<h3 class="term-title"><a class="anchor" href="#t117">Customer Engagement Suite</a></h3>
-<p><strong>Customer Engagement Suite＝顧客とのコミュニケーションを AI で支援する、Google の統合プラットフォーム</strong><br>Customer Engagement Suite は、<strong>Google が提供する、顧客とのコミュニケーションや関係構築を支援するクラウドベースの統合プラットフォーム</strong>です。<br>主に以下のプロダクトで構成されています。</p>
-<h4 class="sub-title">Conversational Agents（会話エージェント）</h4>
-<p><strong>Conversational Agents＝音声・テキストで一次対応を行う AI ボット</strong><br>AIボットが24時間365日、音声やテキストで高精度な一次対応を行います。<br>Gemini の自然な対話能力やマルチモーダル機能（画像・動画の理解）を活用して、柔軟に応対できます。</p>
+<h3 class="term-title"><a class="anchor" href="#t117">Gemini Enterprise for Customer Experience（旧称：Customer Engagement Suite）</a></h3>
+<p><strong>Gemini Enterprise for CX＝顧客とのコミュニケーションを AI で支援する、Google の統合プラットフォーム</strong><br>Gemini Enterprise for Customer Experience（略称：Gemini Enterprise for CX）は、<strong>Google が提供する、顧客とのコミュニケーションや関係構築を支援するクラウドベースの統合プラットフォーム</strong>です。<br>問い合わせ対応の自動化から、オペレーター支援、会話データの分析までを一つの製品群でカバーします。</p>
+<p class="callout warn"><strong>旧称は Customer Engagement Suite（with Google AI）</strong> です。Gemini Enterprise ブランドへの統合にあわせて改称され、配下の製品名も順次変わっています。試験ガイドの版によっては旧名称で出題される可能性があるため、両方押さえておくこと。</p>
+<p>主に以下のプロダクトで構成されています。</p>
+<h4 class="sub-title">CX Agent Studio（旧称：Conversational Agents）</h4>
+<p><strong>CX Agent Studio＝音声・テキストで一次対応を行う AI ボットを構築・運用する環境</strong><br>AIボットが24時間365日、音声やテキストで高精度な一次対応を行います。<br>Gemini の自然な対話能力やマルチモーダル機能（画像・動画の理解）を活用して、柔軟に応対できます。</p>
+<p class="callout note"><strong>Conversational Agents（Dialogflow CX）</strong> の後継にあたり、現在は CX Agent Studio（Customer Experience Agent Studio）へ名称が移行中です。第7章の <strong>Agent Studio</strong>（Agent Platform 側の開発環境）とは別物なので混同しないよう注意します。</p>
 <h4 class="sub-title">Agent Assist（エージェント アシスト）</h4>
 <p><strong>Agent Assist＝人間のオペレーターをリアルタイムで支援する機能</strong><br>人間のオペレーター（担当者）をリアルタイムで支援します。<br>会話内容を分析して回答案を提示したり、複雑な手順をガイド（コーチング）したり、終話後の要約作成を自動化したりします。</p>
 <p class="callout warn">ここでいう「Agent」は <strong>AI ではなく人間の担当者</strong>を指します。第6章の<strong>「Agent（エージェント）」という語の使い分け</strong>も参照してください。</p>
-<h4 class="sub-title">Conversational Insights（会話型インサイト／会話型分析情報）</h4>
-<p><strong>Conversational Insights＝会話データを分析し、傾向や品質を可視化する機能</strong><br>顧客とのすべての会話データを AI で分析します。<br>顧客の感情変化や問い合わせのトレンドを可視化し、サービス改善や自動採点（品質管理）に活用できます。</p>
+<h4 class="sub-title">CX Insights（旧称：Conversational Insights）</h4>
+<p><strong>CX Insights＝会話データを分析し、傾向や品質を可視化する機能</strong><br>顧客とのすべての会話データを AI で分析します。<br>顧客の感情変化や問い合わせのトレンドを可視化し、サービス改善や自動採点（品質管理）に活用できます。</p>
 <h4 class="sub-title">Google Cloud Contact Center as a Service（CCaaS）</h4>
-<p><strong>CCaaS＝AI を組み込んだクラウドネイティブなオムニチャネル コンタクトセンター基盤</strong><br>Google Cloud Contact Center as a Service（CCaaS）は、Google Cloud の<strong>セキュリティ、プライバシー、AI イノベーションを基盤に構築</strong>された、エンタープライズグレードのオムニチャネル コンタクトセンター ソリューションです。<br>電話・チャット・メールなどすべてのチャネルでシームレスかつ一貫した顧客体験を提供し、企業のカスタマーサポートを高度化します。<br>既存の CRM（Salesforce など）や社内システムとの連携、100言語以上の多言語翻訳にも対応しています。</p>
+<p><strong>CCaaS＝AI を組み込んだクラウドネイティブなオムニチャネル コンタクトセンター基盤</strong><br>Google Cloud Contact Center as a Service（CCaaS／CCAI Platform）は、Google Cloud の<strong>セキュリティ、プライバシー、AI イノベーションを基盤に構築</strong>された、エンタープライズグレードのオムニチャネル コンタクトセンター ソリューションです。<br>電話・チャット・メールなどすべてのチャネルでシームレスかつ一貫した顧客体験を提供し、企業のカスタマーサポートを高度化します。<br>既存の CRM（Salesforce など）や社内システムとの連携、100言語以上の多言語翻訳にも対応しています。</p>
 <p class="callout note">単に電話回線をクラウド化するだけでなく、Google の高度な AI（Gemini など）を基盤に組み込むことで、<strong>「顧客対応の自動化」「オペレーターの作業効率化」「センター全体のデータ分析」を一つのシステム上でまとめて実現できる</strong>のが最大の特徴です。</p>
 </article>
 </section>
